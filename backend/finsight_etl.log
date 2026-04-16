@@ -1,0 +1,402 @@
+2026-04-16 11:06:39,666 [INFO] FinSight ETL started � user=1, company=TCS, doc_type=balance_sheet
+2026-04-16 11:06:39,885 [INFO] Excel read OK � 30 raw rows from 'tcs_balance_sheet.xlsx'
+2026-04-16 11:06:39,895 [INFO] Unknown/dynamic fields detected (15): ['property_plant_equipment', 'goodwill', 'investments', 'deferred_tax_assets_net', 'total_non_current_assets', 'other_current_assets', 'total_current_assets', 'equity_share_capital', 'other_equity', 'deferred_tax_liabilities_net'] �and more
+2026-04-16 11:06:39,895 [INFO] Cleaning done � 20 fields retained.
+2026-04-16 11:06:39,898 [INFO] Transformed to 2 rows � user=1, company=TCS, doc=balance_sheet, years=2025/2024
+2026-04-16 11:06:40,094 [INFO] ETL complete.
+2026-04-16 11:08:26,951 [INFO] FinSight ETL started � user=1, company=TCS, doc_type=balance_sheet
+2026-04-16 11:08:27,107 [INFO] Excel read OK � 30 raw rows from 'tcs_balance_sheet.xlsx'
+2026-04-16 11:08:27,114 [INFO] Unknown/dynamic fields detected (15): ['property_plant_equipment', 'goodwill', 'investments', 'deferred_tax_assets_net', 'total_non_current_assets', 'other_current_assets', 'total_current_assets', 'equity_share_capital', 'other_equity', 'deferred_tax_liabilities_net'] �and more
+2026-04-16 11:08:27,114 [INFO] Cleaning done � 20 fields retained.
+2026-04-16 11:08:27,117 [INFO] Transformed to 2 rows � user=1, company=TCS, doc=balance_sheet, years=2025/2024
+2026-04-16 11:08:27,182 [INFO] ETL complete.
+2026-04-16 11:10:20,789 [INFO] ════════════════════════════════════════════════════════════
+2026-04-16 11:10:20,790 [INFO] FinSight ETL started — user=1, company=TCS, doc_type=balance_sheet
+2026-04-16 11:10:20,790 [INFO] 📖  Reading Excel…
+2026-04-16 11:10:20,937 [INFO] Excel read OK — 30 raw rows from 'tcs_balance_sheet.xlsx'
+2026-04-16 11:10:20,938 [INFO] 🧹  Cleaning data…
+2026-04-16 11:10:20,942 [INFO] Unknown/dynamic fields detected (15): ['property_plant_equipment', 'goodwill', 'investments', 'deferred_tax_assets_net', 'total_non_current_assets', 'other_current_assets', 'total_current_assets', 'equity_share_capital', 'other_equity', 'deferred_tax_liabilities_net'] …and more
+2026-04-16 11:10:20,942 [INFO] Cleaning done — 20 fields retained.
+2026-04-16 11:10:20,943 [INFO] 🔄  Transforming to rows…
+2026-04-16 11:10:20,944 [INFO] Transformed to 2 rows — user=1, company=TCS, doc=balance_sheet, years=2025/2024
+2026-04-16 11:10:20,944 [INFO] 💾  Inserting into MySQL…
+2026-04-16 11:10:21,029 [INFO] ✅  Upserted 2 row(s) into `financial_data`.
+2026-04-16 11:10:21,029 [INFO] ETL complete.
+2026-04-16 11:10:21,029 [INFO] ════════════════════════════════════════════════════════════
+2026-04-16 11:16:03,729 [INFO] ════════════════════════════════════════════════════════════
+2026-04-16 11:16:03,729 [INFO] FinSight ETL started — user=1, company=TCS, doc_type=balance_sheet
+2026-04-16 11:16:03,729 [INFO] 📖  Reading Excel…
+2026-04-16 11:16:03,874 [INFO] Excel read OK — 30 raw rows from 'tcs_balance_sheet.xlsx'
+2026-04-16 11:16:03,875 [INFO] 🧹  Cleaning data…
+2026-04-16 11:16:03,879 [INFO] Unknown/dynamic fields detected (15): ['property_plant_equipment', 'goodwill', 'investments', 'deferred_tax_assets_net', 'total_non_current_assets', 'other_current_assets', 'total_current_assets', 'equity_share_capital', 'other_equity', 'deferred_tax_liabilities_net'] …and more
+2026-04-16 11:16:03,879 [INFO] Cleaning done — 20 fields retained.
+2026-04-16 11:16:03,880 [INFO] 🔄  Transforming to rows…
+2026-04-16 11:16:03,881 [INFO] Transformed to 2 rows — user=1, company=TCS, doc=balance_sheet, years=2025/2024
+2026-04-16 11:16:03,881 [INFO] 💾  Inserting into MySQL…
+2026-04-16 11:16:03,970 [INFO] ✅  Upserted 2 row(s) into `financial_data`.
+2026-04-16 11:16:03,971 [INFO] ETL complete.
+2026-04-16 11:16:03,971 [INFO] ════════════════════════════════════════════════════════════
+2026-04-16 11:16:03,971 [INFO] ════════════════════════════════════════════════════════════
+2026-04-16 11:16:03,972 [INFO] FinSight ETL started — user=1, company=TCS, doc_type=balance_sheet
+2026-04-16 11:16:03,972 [INFO] 📖  Reading Excel…
+2026-04-16 11:16:03,979 [INFO] Excel read OK — 30 raw rows from 'tcs_balance_sheet.xlsx'
+2026-04-16 11:16:03,979 [INFO] 🧹  Cleaning data…
+2026-04-16 11:16:03,983 [INFO] Unknown/dynamic fields detected (15): ['property_plant_equipment', 'goodwill', 'investments', 'deferred_tax_assets_net', 'total_non_current_assets', 'other_current_assets', 'total_current_assets', 'equity_share_capital', 'other_equity', 'deferred_tax_liabilities_net'] …and more
+2026-04-16 11:16:03,983 [INFO] Cleaning done — 20 fields retained.
+2026-04-16 11:16:03,984 [INFO] 🔄  Transforming to rows…
+2026-04-16 11:16:03,985 [INFO] Transformed to 2 rows — user=1, company=TCS, doc=balance_sheet, years=2025/2024
+2026-04-16 11:16:03,986 [INFO] 💾  Inserting into MySQL…
+2026-04-16 11:16:03,999 [INFO] ✅  Upserted 2 row(s) into `financial_data`.
+2026-04-16 11:16:03,999 [INFO] ETL complete.
+2026-04-16 11:16:04,000 [INFO] ════════════════════════════════════════════════════════════
+2026-04-16 11:16:04,000 [INFO] ════════════════════════════════════════════════════════════
+2026-04-16 11:16:04,000 [INFO] FinSight ETL started — user=2, company=TCS, doc_type=balance_sheet
+2026-04-16 11:16:04,000 [INFO] 📖  Reading Excel…
+2026-04-16 11:16:04,007 [INFO] Excel read OK — 30 raw rows from 'tcs_balance_sheet.xlsx'
+2026-04-16 11:16:04,007 [INFO] 🧹  Cleaning data…
+2026-04-16 11:16:04,011 [INFO] Unknown/dynamic fields detected (15): ['property_plant_equipment', 'goodwill', 'investments', 'deferred_tax_assets_net', 'total_non_current_assets', 'other_current_assets', 'total_current_assets', 'equity_share_capital', 'other_equity', 'deferred_tax_liabilities_net'] …and more
+2026-04-16 11:16:04,011 [INFO] Cleaning done — 20 fields retained.
+2026-04-16 11:16:04,012 [INFO] 🔄  Transforming to rows…
+2026-04-16 11:16:04,013 [INFO] Transformed to 2 rows — user=2, company=TCS, doc=balance_sheet, years=2025/2024
+2026-04-16 11:16:04,013 [INFO] 💾  Inserting into MySQL…
+2026-04-16 11:16:04,030 [INFO] ✅  Upserted 2 row(s) into `financial_data`.
+2026-04-16 11:16:04,030 [INFO] ETL complete.
+2026-04-16 11:16:04,031 [INFO] ════════════════════════════════════════════════════════════
+2026-04-16 11:19:01,006 [INFO] ════════════════════════════════════════════════════════════
+2026-04-16 11:19:01,006 [INFO] FinSight ETL started — user=1, company=TCS, doc_type=balance_sheet
+2026-04-16 11:19:01,006 [INFO] 📖  Reading Excel…
+2026-04-16 11:19:01,151 [INFO] Excel read OK — 30 raw rows from 'tcs_balance_sheet.xlsx'
+2026-04-16 11:19:01,151 [INFO] 🧹  Cleaning data…
+2026-04-16 11:19:01,156 [INFO] Unknown/dynamic fields detected (15): ['property_plant_equipment', 'goodwill', 'investments', 'deferred_tax_assets_net', 'total_non_current_assets', 'other_current_assets', 'total_current_assets', 'equity_share_capital', 'other_equity', 'deferred_tax_liabilities_net'] …and more
+2026-04-16 11:19:01,156 [INFO] Cleaning done — 20 fields retained.
+2026-04-16 11:19:01,156 [INFO] 🔄  Transforming to rows…
+2026-04-16 11:19:01,157 [INFO] Transformed to 2 rows — user=1, company=TCS, doc=balance_sheet, years=2025/2024
+2026-04-16 11:19:01,158 [INFO] 💾  Inserting into MySQL…
+2026-04-16 11:19:01,242 [INFO] ✅  Upserted 2 row(s) into `financial_data`.
+2026-04-16 11:19:01,243 [INFO] ETL complete.
+2026-04-16 11:19:01,243 [INFO] ════════════════════════════════════════════════════════════
+2026-04-16 11:19:01,243 [INFO] ════════════════════════════════════════════════════════════
+2026-04-16 11:19:01,243 [INFO] FinSight ETL started — user=1, company=TCS, doc_type=balance_sheet
+2026-04-16 11:19:01,244 [INFO] 📖  Reading Excel…
+2026-04-16 11:19:01,251 [INFO] Excel read OK — 30 raw rows from 'tcs_balance_sheet.xlsx'
+2026-04-16 11:19:01,251 [INFO] 🧹  Cleaning data…
+2026-04-16 11:19:01,255 [INFO] Unknown/dynamic fields detected (15): ['property_plant_equipment', 'goodwill', 'investments', 'deferred_tax_assets_net', 'total_non_current_assets', 'other_current_assets', 'total_current_assets', 'equity_share_capital', 'other_equity', 'deferred_tax_liabilities_net'] …and more
+2026-04-16 11:19:01,255 [INFO] Cleaning done — 20 fields retained.
+2026-04-16 11:19:01,256 [INFO] 🔄  Transforming to rows…
+2026-04-16 11:19:01,257 [INFO] Transformed to 2 rows — user=1, company=TCS, doc=balance_sheet, years=2025/2024
+2026-04-16 11:19:01,257 [INFO] 💾  Inserting into MySQL…
+2026-04-16 11:19:01,269 [INFO] ✅  Upserted 2 row(s) into `financial_data`.
+2026-04-16 11:19:01,270 [INFO] ETL complete.
+2026-04-16 11:19:01,270 [INFO] ════════════════════════════════════════════════════════════
+2026-04-16 11:19:01,270 [INFO] ════════════════════════════════════════════════════════════
+2026-04-16 11:19:01,270 [INFO] FinSight ETL started — user=2, company=TCS, doc_type=balance_sheet
+2026-04-16 11:19:01,270 [INFO] 📖  Reading Excel…
+2026-04-16 11:19:01,277 [INFO] Excel read OK — 30 raw rows from 'tcs_balance_sheet.xlsx'
+2026-04-16 11:19:01,278 [INFO] 🧹  Cleaning data…
+2026-04-16 11:19:01,281 [INFO] Unknown/dynamic fields detected (15): ['property_plant_equipment', 'goodwill', 'investments', 'deferred_tax_assets_net', 'total_non_current_assets', 'other_current_assets', 'total_current_assets', 'equity_share_capital', 'other_equity', 'deferred_tax_liabilities_net'] …and more
+2026-04-16 11:19:01,281 [INFO] Cleaning done — 20 fields retained.
+2026-04-16 11:19:01,282 [INFO] 🔄  Transforming to rows…
+2026-04-16 11:19:01,283 [INFO] Transformed to 2 rows — user=2, company=TCS, doc=balance_sheet, years=2025/2024
+2026-04-16 11:19:01,283 [INFO] 💾  Inserting into MySQL…
+2026-04-16 11:19:01,299 [INFO] ✅  Upserted 2 row(s) into `financial_data`.
+2026-04-16 11:19:01,299 [INFO] ETL complete.
+2026-04-16 11:19:01,300 [INFO] ════════════════════════════════════════════════════════════
+2026-04-16 11:51:24,965 [INFO] ==================================================
+2026-04-16 11:51:24,965 [INFO] Start — user=1, company=TCS, doc=balance_sheet
+2026-04-16 11:51:56,807 [INFO] ==================================================
+2026-04-16 11:51:56,807 [INFO] Start — user=1, company=BS.XLSX, doc=balance_sheet
+2026-04-16 11:51:57,003 [INFO] Excel read OK — 56 rows
+2026-04-16 11:51:57,010 [WARNING] Unknown field: Right-of-use assets → right_use_assets
+2026-04-16 11:51:57,010 [WARNING] Unknown field: Capital work-in-progress → capital_work_progress
+2026-04-16 11:51:57,011 [WARNING] Unknown field: Goodwill → goodwill
+2026-04-16 11:51:57,011 [WARNING] Unknown field: Investments → investments
+2026-04-16 11:51:57,011 [WARNING] Unknown field: Loans → loans
+2026-04-16 11:51:57,011 [WARNING] Unknown field: Other financial assets → other_financial_assets
+2026-04-16 11:51:57,011 [WARNING] Unknown field: Deferred tax assets (net) → deferred_tax_assets
+2026-04-16 11:51:57,012 [WARNING] Unknown field: Income iax assets (net) → income_iax_assets
+2026-04-16 11:51:57,012 [WARNING] Unknown field: Other non-current assets → other_non_current_assets
+2026-04-16 11:51:57,012 [WARNING] Unknown field: Investments → investments
+2026-04-16 11:51:57,012 [WARNING] Unknown field: Cash and cash equivalents → cash_cash_equivalents
+2026-04-16 11:51:57,012 [WARNING] Unknown field: Loans → loans
+2026-04-16 11:51:57,012 [WARNING] Unknown field: Other financial assets → other_financial_assets
+2026-04-16 11:51:57,012 [WARNING] Unknown field: Income fax assets (net) → income_fax_assets
+2026-04-16 11:51:57,013 [WARNING] Unknown field: Other current assets → other_current_assets
+2026-04-16 11:51:57,013 [WARNING] Unknown field: Other equity → other_equity
+2026-04-16 11:51:57,013 [WARNING] Unknown field: Total equity → total_equity
+2026-04-16 11:51:57,013 [WARNING] Unknown field: Lease liabilities → lease_liabilities
+2026-04-16 11:51:57,013 [WARNING] Unknown field: Other financial liabilities → other_financial_liabilities
+2026-04-16 11:51:57,013 [WARNING] Unknown field: Deferred tax liabilities (net) → deferred_tax_liabilities
+2026-04-16 11:51:57,014 [WARNING] Unknown field: Other non-current liabilities → other_non_current_liabilities
+2026-04-16 11:51:57,014 [WARNING] Unknown field: Lease liabilities → lease_liabilities
+2026-04-16 11:51:57,014 [WARNING] Unknown field: Total outstanding dues of micro enterprises and small enterprises → total_outstanding_dues_micro_enterprises_small_ent
+2026-04-16 11:51:57,014 [WARNING] Unknown field: Total outstanding dues of creditors other than micro enterprises and small enterprises → total_outstanding_dues_creditors_other_than_micro_
+2026-04-16 11:51:57,014 [WARNING] Unknown field: Other financial liabilities → other_financial_liabilities
+2026-04-16 11:51:57,014 [WARNING] Unknown field: Other current liabilities → other_current_liabilities
+2026-04-16 11:51:57,014 [WARNING] Unknown field: Provisions → provisions
+2026-04-16 11:51:57,015 [WARNING] Unknown field: Income tax liabilities (net) → income_tax_liabilities
+2026-04-16 11:51:57,015 [WARNING] Unknown field: Total equity and liabilities → total_equity_liabilities
+2026-04-16 11:51:57,019 [INFO] Cleaning done — 32 fields
+2026-04-16 11:55:56,565 [INFO] ==================================================
+2026-04-16 11:55:56,566 [INFO] Start — user=1, company=BS.XLSX, doc=balance_sheet
+2026-04-16 11:55:56,726 [INFO] Excel read OK — 56 rows
+2026-04-16 11:55:56,730 [WARNING] Unknown field: Right-of-use assets → right_use_assets
+2026-04-16 11:55:56,730 [WARNING] Unknown field: Capital work-in-progress → capital_work_progress
+2026-04-16 11:55:56,730 [WARNING] Unknown field: Goodwill → goodwill
+2026-04-16 11:55:56,731 [WARNING] Unknown field: Investments → investments
+2026-04-16 11:55:56,731 [WARNING] Unknown field: Loans → loans
+2026-04-16 11:55:56,731 [WARNING] Unknown field: Other financial assets → other_financial_assets
+2026-04-16 11:55:56,731 [WARNING] Unknown field: Deferred tax assets (net) → deferred_tax_assets
+2026-04-16 11:55:56,731 [WARNING] Unknown field: Income iax assets (net) → income_iax_assets
+2026-04-16 11:55:56,731 [WARNING] Unknown field: Other non-current assets → other_non_current_assets
+2026-04-16 11:55:56,731 [WARNING] Unknown field: Investments → investments
+2026-04-16 11:55:56,732 [WARNING] Unknown field: Cash and cash equivalents → cash_cash_equivalents
+2026-04-16 11:55:56,732 [WARNING] Unknown field: Loans → loans
+2026-04-16 11:55:56,732 [WARNING] Unknown field: Other financial assets → other_financial_assets
+2026-04-16 11:55:56,732 [WARNING] Unknown field: Income fax assets (net) → income_fax_assets
+2026-04-16 11:55:56,732 [WARNING] Unknown field: Other current assets → other_current_assets
+2026-04-16 11:55:56,732 [WARNING] Unknown field: Other equity → other_equity
+2026-04-16 11:55:56,732 [WARNING] Unknown field: Total equity → total_equity
+2026-04-16 11:55:56,733 [WARNING] Unknown field: Lease liabilities → lease_liabilities
+2026-04-16 11:55:56,733 [WARNING] Unknown field: Other financial liabilities → other_financial_liabilities
+2026-04-16 11:55:56,733 [WARNING] Unknown field: Deferred tax liabilities (net) → deferred_tax_liabilities
+2026-04-16 11:55:56,733 [WARNING] Unknown field: Other non-current liabilities → other_non_current_liabilities
+2026-04-16 11:55:56,733 [WARNING] Unknown field: Lease liabilities → lease_liabilities
+2026-04-16 11:55:56,733 [WARNING] Unknown field: Total outstanding dues of micro enterprises and small enterprises → total_outstanding_dues_micro_enterprises_small_ent
+2026-04-16 11:55:56,733 [WARNING] Unknown field: Total outstanding dues of creditors other than micro enterprises and small enterprises → total_outstanding_dues_creditors_other_than_micro_
+2026-04-16 11:55:56,734 [WARNING] Unknown field: Other financial liabilities → other_financial_liabilities
+2026-04-16 11:55:56,734 [WARNING] Unknown field: Other current liabilities → other_current_liabilities
+2026-04-16 11:55:56,734 [WARNING] Unknown field: Provisions → provisions
+2026-04-16 11:55:56,734 [WARNING] Unknown field: Income tax liabilities (net) → income_tax_liabilities
+2026-04-16 11:55:56,734 [WARNING] Unknown field: Total equity and liabilities → total_equity_liabilities
+2026-04-16 11:55:56,736 [INFO] Cleaning done — 32 fields
+2026-04-16 11:58:48,238 [INFO] ==================================================
+2026-04-16 11:58:48,239 [INFO] Start — user=1, company=BS.XLSX, doc=balance_sheet
+2026-04-16 11:58:48,402 [INFO] Excel read OK — 56 rows
+2026-04-16 11:58:48,405 [WARNING] Unknown field: Right-of-use assets → right_use_assets
+2026-04-16 11:58:48,405 [WARNING] Unknown field: Capital work-in-progress → capital_work_progress
+2026-04-16 11:58:48,406 [WARNING] Unknown field: Goodwill → goodwill
+2026-04-16 11:58:48,406 [WARNING] Unknown field: Investments → investments
+2026-04-16 11:58:48,406 [WARNING] Unknown field: Loans → loans
+2026-04-16 11:58:48,406 [WARNING] Unknown field: Other financial assets → other_financial_assets
+2026-04-16 11:58:48,406 [WARNING] Unknown field: Deferred tax assets (net) → deferred_tax_assets
+2026-04-16 11:58:48,406 [WARNING] Unknown field: Income iax assets (net) → income_iax_assets
+2026-04-16 11:58:48,407 [WARNING] Unknown field: Other non-current assets → other_non_current_assets
+2026-04-16 11:58:48,407 [WARNING] Unknown field: Investments → investments
+2026-04-16 11:58:48,407 [WARNING] Unknown field: Cash and cash equivalents → cash_cash_equivalents
+2026-04-16 11:58:48,407 [WARNING] Unknown field: Loans → loans
+2026-04-16 11:58:48,407 [WARNING] Unknown field: Other financial assets → other_financial_assets
+2026-04-16 11:58:48,407 [WARNING] Unknown field: Income fax assets (net) → income_fax_assets
+2026-04-16 11:58:48,407 [WARNING] Unknown field: Other current assets → other_current_assets
+2026-04-16 11:58:48,408 [WARNING] Unknown field: Other equity → other_equity
+2026-04-16 11:58:48,408 [WARNING] Unknown field: Total equity → total_equity
+2026-04-16 11:58:48,408 [WARNING] Unknown field: Lease liabilities → lease_liabilities
+2026-04-16 11:58:48,408 [WARNING] Unknown field: Other financial liabilities → other_financial_liabilities
+2026-04-16 11:58:48,408 [WARNING] Unknown field: Deferred tax liabilities (net) → deferred_tax_liabilities
+2026-04-16 11:58:48,408 [WARNING] Unknown field: Other non-current liabilities → other_non_current_liabilities
+2026-04-16 11:58:48,409 [WARNING] Unknown field: Lease liabilities → lease_liabilities
+2026-04-16 11:58:48,409 [WARNING] Unknown field: Total outstanding dues of micro enterprises and small enterprises → total_outstanding_dues_micro_enterprises_small_ent
+2026-04-16 11:58:48,409 [WARNING] Unknown field: Total outstanding dues of creditors other than micro enterprises and small enterprises → total_outstanding_dues_creditors_other_than_micro_
+2026-04-16 11:58:48,409 [WARNING] Unknown field: Other financial liabilities → other_financial_liabilities
+2026-04-16 11:58:48,409 [WARNING] Unknown field: Other current liabilities → other_current_liabilities
+2026-04-16 11:58:48,409 [WARNING] Unknown field: Provisions → provisions
+2026-04-16 11:58:48,410 [WARNING] Unknown field: Income tax liabilities (net) → income_tax_liabilities
+2026-04-16 11:58:48,410 [WARNING] Unknown field: Total equity and liabilities → total_equity_liabilities
+2026-04-16 11:58:48,411 [INFO] Cleaning done — 32 fields
+2026-04-16 12:00:21,917 [INFO] ==================================================
+2026-04-16 12:00:21,918 [INFO] Start — user=1, company=BS.XLSX, doc=balance_sheet
+2026-04-16 12:00:22,074 [INFO] Excel read OK — 56 rows
+2026-04-16 12:00:22,077 [WARNING] Unknown field: Right-of-use assets → right_use_assets
+2026-04-16 12:00:22,077 [WARNING] Unknown field: Capital work-in-progress → capital_work_progress
+2026-04-16 12:00:22,078 [WARNING] Unknown field: Goodwill → goodwill
+2026-04-16 12:00:22,078 [WARNING] Unknown field: Investments → investments
+2026-04-16 12:00:22,078 [WARNING] Unknown field: Loans → loans
+2026-04-16 12:00:22,078 [WARNING] Unknown field: Other financial assets → other_financial_assets
+2026-04-16 12:00:22,078 [WARNING] Unknown field: Deferred tax assets (net) → deferred_tax_assets
+2026-04-16 12:00:22,079 [WARNING] Unknown field: Income iax assets (net) → income_iax_assets
+2026-04-16 12:00:22,079 [WARNING] Unknown field: Other non-current assets → other_non_current_assets
+2026-04-16 12:00:22,079 [WARNING] Unknown field: Investments → investments
+2026-04-16 12:00:22,079 [WARNING] Unknown field: Cash and cash equivalents → cash_cash_equivalents
+2026-04-16 12:00:22,080 [WARNING] Unknown field: Loans → loans
+2026-04-16 12:00:22,080 [WARNING] Unknown field: Other financial assets → other_financial_assets
+2026-04-16 12:00:22,080 [WARNING] Unknown field: Income fax assets (net) → income_fax_assets
+2026-04-16 12:00:22,080 [WARNING] Unknown field: Other current assets → other_current_assets
+2026-04-16 12:00:22,080 [WARNING] Unknown field: Other equity → other_equity
+2026-04-16 12:00:22,080 [WARNING] Unknown field: Total equity → total_equity
+2026-04-16 12:00:22,081 [WARNING] Unknown field: Lease liabilities → lease_liabilities
+2026-04-16 12:00:22,081 [WARNING] Unknown field: Other financial liabilities → other_financial_liabilities
+2026-04-16 12:00:22,081 [WARNING] Unknown field: Deferred tax liabilities (net) → deferred_tax_liabilities
+2026-04-16 12:00:22,081 [WARNING] Unknown field: Other non-current liabilities → other_non_current_liabilities
+2026-04-16 12:00:22,081 [WARNING] Unknown field: Lease liabilities → lease_liabilities
+2026-04-16 12:00:22,081 [WARNING] Unknown field: Total outstanding dues of micro enterprises and small enterprises → total_outstanding_dues_micro_enterprises_small_ent
+2026-04-16 12:00:22,081 [WARNING] Unknown field: Total outstanding dues of creditors other than micro enterprises and small enterprises → total_outstanding_dues_creditors_other_than_micro_
+2026-04-16 12:00:22,082 [WARNING] Unknown field: Other financial liabilities → other_financial_liabilities
+2026-04-16 12:00:22,082 [WARNING] Unknown field: Other current liabilities → other_current_liabilities
+2026-04-16 12:00:22,082 [WARNING] Unknown field: Provisions → provisions
+2026-04-16 12:00:22,082 [WARNING] Unknown field: Income tax liabilities (net) → income_tax_liabilities
+2026-04-16 12:00:22,082 [WARNING] Unknown field: Total equity and liabilities → total_equity_liabilities
+2026-04-16 12:00:22,085 [INFO] Cleaning done — 32 fields
+2026-04-16 12:04:55,986 [INFO] ==================================================
+2026-04-16 12:04:55,986 [INFO] Start — user=1, company=BS.XLSX, doc=balance_sheet
+2026-04-16 12:04:56,140 [INFO] Excel read OK — 56 rows
+2026-04-16 12:04:56,143 [WARNING] Unknown field: Right-of-use assets → right_use_assets
+2026-04-16 12:04:56,143 [WARNING] Unknown field: Capital work-in-progress → capital_work_progress
+2026-04-16 12:04:56,143 [WARNING] Unknown field: Goodwill → goodwill
+2026-04-16 12:04:56,143 [WARNING] Unknown field: Investments → investments
+2026-04-16 12:04:56,143 [WARNING] Unknown field: Loans → loans
+2026-04-16 12:04:56,143 [WARNING] Unknown field: Other financial assets → other_financial_assets
+2026-04-16 12:04:56,144 [WARNING] Unknown field: Deferred tax assets (net) → deferred_tax_assets
+2026-04-16 12:04:56,144 [WARNING] Unknown field: Income iax assets (net) → income_iax_assets
+2026-04-16 12:04:56,144 [WARNING] Unknown field: Other non-current assets → other_non_current_assets
+2026-04-16 12:04:56,144 [WARNING] Unknown field: Investments → investments
+2026-04-16 12:04:56,144 [WARNING] Unknown field: Cash and cash equivalents → cash_cash_equivalents
+2026-04-16 12:04:56,144 [WARNING] Unknown field: Loans → loans
+2026-04-16 12:04:56,144 [WARNING] Unknown field: Other financial assets → other_financial_assets
+2026-04-16 12:04:56,144 [WARNING] Unknown field: Income fax assets (net) → income_fax_assets
+2026-04-16 12:04:56,144 [WARNING] Unknown field: Other current assets → other_current_assets
+2026-04-16 12:04:56,144 [WARNING] Unknown field: Other equity → other_equity
+2026-04-16 12:04:56,144 [WARNING] Unknown field: Total equity → total_equity
+2026-04-16 12:04:56,145 [WARNING] Unknown field: Lease liabilities → lease_liabilities
+2026-04-16 12:04:56,145 [WARNING] Unknown field: Other financial liabilities → other_financial_liabilities
+2026-04-16 12:04:56,145 [WARNING] Unknown field: Deferred tax liabilities (net) → deferred_tax_liabilities
+2026-04-16 12:04:56,145 [WARNING] Unknown field: Other non-current liabilities → other_non_current_liabilities
+2026-04-16 12:04:56,145 [WARNING] Unknown field: Lease liabilities → lease_liabilities
+2026-04-16 12:04:56,146 [WARNING] Unknown field: Total outstanding dues of micro enterprises and small enterprises → total_outstanding_dues_micro_enterprises_small_ent
+2026-04-16 12:04:56,146 [WARNING] Unknown field: Total outstanding dues of creditors other than micro enterprises and small enterprises → total_outstanding_dues_creditors_other_than_micro_
+2026-04-16 12:04:56,146 [WARNING] Unknown field: Other financial liabilities → other_financial_liabilities
+2026-04-16 12:04:56,146 [WARNING] Unknown field: Other current liabilities → other_current_liabilities
+2026-04-16 12:04:56,146 [WARNING] Unknown field: Provisions → provisions
+2026-04-16 12:04:56,146 [WARNING] Unknown field: Income tax liabilities (net) → income_tax_liabilities
+2026-04-16 12:04:56,147 [WARNING] Unknown field: Total equity and liabilities → total_equity_liabilities
+2026-04-16 12:04:56,149 [INFO] Cleaning done — 32 fields
+2026-04-16 12:06:08,666 [INFO] ==================================================
+2026-04-16 12:06:08,666 [INFO] Start — user=1, company=BS.XLSX, doc=balance_sheet
+2026-04-16 12:06:08,824 [INFO] Excel read OK — 56 rows
+2026-04-16 12:06:08,827 [WARNING] Unknown field: Right-of-use assets → right_use_assets
+2026-04-16 12:06:08,827 [WARNING] Unknown field: Capital work-in-progress → capital_work_progress
+2026-04-16 12:06:08,827 [WARNING] Unknown field: Goodwill → goodwill
+2026-04-16 12:06:08,827 [WARNING] Unknown field: Investments → investments
+2026-04-16 12:06:08,827 [WARNING] Unknown field: Loans → loans
+2026-04-16 12:06:08,827 [WARNING] Unknown field: Other financial assets → other_financial_assets
+2026-04-16 12:06:08,828 [WARNING] Unknown field: Deferred tax assets (net) → deferred_tax_assets
+2026-04-16 12:06:08,828 [WARNING] Unknown field: Income iax assets (net) → income_iax_assets
+2026-04-16 12:06:08,828 [WARNING] Unknown field: Other non-current assets → other_non_current_assets
+2026-04-16 12:06:08,828 [WARNING] Unknown field: Investments → investments
+2026-04-16 12:06:08,828 [WARNING] Unknown field: Cash and cash equivalents → cash_cash_equivalents
+2026-04-16 12:06:08,829 [WARNING] Unknown field: Loans → loans
+2026-04-16 12:06:08,829 [WARNING] Unknown field: Other financial assets → other_financial_assets
+2026-04-16 12:06:08,829 [WARNING] Unknown field: Income fax assets (net) → income_fax_assets
+2026-04-16 12:06:08,829 [WARNING] Unknown field: Other current assets → other_current_assets
+2026-04-16 12:06:08,829 [WARNING] Unknown field: Other equity → other_equity
+2026-04-16 12:06:08,830 [WARNING] Unknown field: Total equity → total_equity
+2026-04-16 12:06:08,830 [WARNING] Unknown field: Lease liabilities → lease_liabilities
+2026-04-16 12:06:08,830 [WARNING] Unknown field: Other financial liabilities → other_financial_liabilities
+2026-04-16 12:06:08,830 [WARNING] Unknown field: Deferred tax liabilities (net) → deferred_tax_liabilities
+2026-04-16 12:06:08,830 [WARNING] Unknown field: Other non-current liabilities → other_non_current_liabilities
+2026-04-16 12:06:08,830 [WARNING] Unknown field: Lease liabilities → lease_liabilities
+2026-04-16 12:06:08,831 [WARNING] Unknown field: Total outstanding dues of micro enterprises and small enterprises → total_outstanding_dues_micro_enterprises_small_ent
+2026-04-16 12:06:08,831 [WARNING] Unknown field: Total outstanding dues of creditors other than micro enterprises and small enterprises → total_outstanding_dues_creditors_other_than_micro_
+2026-04-16 12:06:08,831 [WARNING] Unknown field: Other financial liabilities → other_financial_liabilities
+2026-04-16 12:06:08,831 [WARNING] Unknown field: Other current liabilities → other_current_liabilities
+2026-04-16 12:06:08,831 [WARNING] Unknown field: Provisions → provisions
+2026-04-16 12:06:08,831 [WARNING] Unknown field: Income tax liabilities (net) → income_tax_liabilities
+2026-04-16 12:06:08,832 [WARNING] Unknown field: Total equity and liabilities → total_equity_liabilities
+2026-04-16 12:06:08,834 [INFO] Cleaning done — 32 fields
+2026-04-16 12:07:50,004 [INFO] ==================================================
+2026-04-16 12:07:50,004 [INFO] Start — user=1, company=BS.XLSX, doc=balance_sheet
+2026-04-16 12:07:50,175 [INFO] Excel read OK — 56 rows
+2026-04-16 12:07:50,178 [WARNING] Unknown field: Right-of-use assets → right_use_assets
+2026-04-16 12:07:50,178 [WARNING] Unknown field: Capital work-in-progress → capital_work_progress
+2026-04-16 12:07:50,178 [WARNING] Unknown field: Goodwill → goodwill
+2026-04-16 12:07:50,178 [WARNING] Unknown field: Investments → investments
+2026-04-16 12:07:50,178 [WARNING] Unknown field: Loans → loans
+2026-04-16 12:07:50,178 [WARNING] Unknown field: Other financial assets → other_financial_assets
+2026-04-16 12:07:50,179 [WARNING] Unknown field: Deferred tax assets (net) → deferred_tax_assets
+2026-04-16 12:07:50,179 [WARNING] Unknown field: Income iax assets (net) → income_iax_assets
+2026-04-16 12:07:50,179 [WARNING] Unknown field: Other non-current assets → other_non_current_assets
+2026-04-16 12:07:50,179 [WARNING] Unknown field: Investments → investments
+2026-04-16 12:07:50,179 [WARNING] Unknown field: Cash and cash equivalents → cash_cash_equivalents
+2026-04-16 12:07:50,179 [WARNING] Unknown field: Loans → loans
+2026-04-16 12:07:50,179 [WARNING] Unknown field: Other financial assets → other_financial_assets
+2026-04-16 12:07:50,180 [WARNING] Unknown field: Income fax assets (net) → income_fax_assets
+2026-04-16 12:07:50,180 [WARNING] Unknown field: Other current assets → other_current_assets
+2026-04-16 12:07:50,180 [WARNING] Unknown field: Other equity → other_equity
+2026-04-16 12:07:50,180 [WARNING] Unknown field: Total equity → total_equity
+2026-04-16 12:07:50,180 [WARNING] Unknown field: Lease liabilities → lease_liabilities
+2026-04-16 12:07:50,181 [WARNING] Unknown field: Other financial liabilities → other_financial_liabilities
+2026-04-16 12:07:50,181 [WARNING] Unknown field: Deferred tax liabilities (net) → deferred_tax_liabilities
+2026-04-16 12:07:50,181 [WARNING] Unknown field: Other non-current liabilities → other_non_current_liabilities
+2026-04-16 12:07:50,181 [WARNING] Unknown field: Lease liabilities → lease_liabilities
+2026-04-16 12:07:50,181 [WARNING] Unknown field: Total outstanding dues of micro enterprises and small enterprises → total_outstanding_dues_micro_enterprises_small_ent
+2026-04-16 12:07:50,181 [WARNING] Unknown field: Total outstanding dues of creditors other than micro enterprises and small enterprises → total_outstanding_dues_creditors_other_than_micro_
+2026-04-16 12:07:50,182 [WARNING] Unknown field: Other financial liabilities → other_financial_liabilities
+2026-04-16 12:07:50,182 [WARNING] Unknown field: Other current liabilities → other_current_liabilities
+2026-04-16 12:07:50,182 [WARNING] Unknown field: Provisions → provisions
+2026-04-16 12:07:50,182 [WARNING] Unknown field: Income tax liabilities (net) → income_tax_liabilities
+2026-04-16 12:07:50,182 [WARNING] Unknown field: Total equity and liabilities → total_equity_liabilities
+2026-04-16 12:07:50,185 [INFO] Cleaning done — 32 fields
+2026-04-16 12:10:29,020 [INFO] ==================================================
+2026-04-16 12:10:29,020 [INFO] Start — user=1, company=BS.XLSX, doc=balance_sheet
+2026-04-16 12:10:29,175 [INFO] Excel read OK — 56 rows
+2026-04-16 12:10:29,177 [WARNING] Unknown field: Right-of-use assets → right_use_assets
+2026-04-16 12:10:29,178 [WARNING] Unknown field: Capital work-in-progress → capital_work_progress
+2026-04-16 12:10:29,178 [WARNING] Unknown field: Goodwill → goodwill
+2026-04-16 12:10:29,178 [WARNING] Unknown field: Investments → investments
+2026-04-16 12:10:29,178 [WARNING] Unknown field: Loans → loans
+2026-04-16 12:10:29,178 [WARNING] Unknown field: Other financial assets → other_financial_assets
+2026-04-16 12:10:29,178 [WARNING] Unknown field: Deferred tax assets (net) → deferred_tax_assets
+2026-04-16 12:10:29,178 [WARNING] Unknown field: Income iax assets (net) → income_iax_assets
+2026-04-16 12:10:29,179 [WARNING] Unknown field: Other non-current assets → other_non_current_assets
+2026-04-16 12:10:29,179 [WARNING] Unknown field: Investments → investments
+2026-04-16 12:10:29,179 [WARNING] Unknown field: Cash and cash equivalents → cash_cash_equivalents
+2026-04-16 12:10:29,179 [WARNING] Unknown field: Loans → loans
+2026-04-16 12:10:29,179 [WARNING] Unknown field: Other financial assets → other_financial_assets
+2026-04-16 12:10:29,179 [WARNING] Unknown field: Income fax assets (net) → income_fax_assets
+2026-04-16 12:10:29,179 [WARNING] Unknown field: Other current assets → other_current_assets
+2026-04-16 12:10:29,180 [WARNING] Unknown field: Other equity → other_equity
+2026-04-16 12:10:29,180 [WARNING] Unknown field: Total equity → total_equity
+2026-04-16 12:10:29,180 [WARNING] Unknown field: Lease liabilities → lease_liabilities
+2026-04-16 12:10:29,180 [WARNING] Unknown field: Other financial liabilities → other_financial_liabilities
+2026-04-16 12:10:29,180 [WARNING] Unknown field: Deferred tax liabilities (net) → deferred_tax_liabilities
+2026-04-16 12:10:29,180 [WARNING] Unknown field: Other non-current liabilities → other_non_current_liabilities
+2026-04-16 12:10:29,181 [WARNING] Unknown field: Lease liabilities → lease_liabilities
+2026-04-16 12:10:29,181 [WARNING] Unknown field: Total outstanding dues of micro enterprises and small enterprises → total_outstanding_dues_micro_enterprises_small_ent
+2026-04-16 12:10:29,181 [WARNING] Unknown field: Total outstanding dues of creditors other than micro enterprises and small enterprises → total_outstanding_dues_creditors_other_than_micro_
+2026-04-16 12:10:29,181 [WARNING] Unknown field: Other financial liabilities → other_financial_liabilities
+2026-04-16 12:10:29,181 [WARNING] Unknown field: Other current liabilities → other_current_liabilities
+2026-04-16 12:10:29,182 [WARNING] Unknown field: Provisions → provisions
+2026-04-16 12:10:29,182 [WARNING] Unknown field: Income tax liabilities (net) → income_tax_liabilities
+2026-04-16 12:10:29,182 [WARNING] Unknown field: Total equity and liabilities → total_equity_liabilities
+2026-04-16 12:10:29,184 [INFO] Cleaning done — 32 fields
+2026-04-16 12:12:52,784 [INFO] ==================================================
+2026-04-16 12:12:52,785 [INFO] Start — user=1, company=BS.XLSX, doc=balance_sheet
+2026-04-16 12:12:52,936 [INFO] Excel read OK — 56 rows
+2026-04-16 12:12:52,939 [WARNING] Unknown field: Right-of-use assets → right_use_assets
+2026-04-16 12:12:52,939 [WARNING] Unknown field: Capital work-in-progress → capital_work_progress
+2026-04-16 12:12:52,940 [WARNING] Unknown field: Goodwill → goodwill
+2026-04-16 12:12:52,940 [WARNING] Unknown field: Investments → investments
+2026-04-16 12:12:52,940 [WARNING] Unknown field: Loans → loans
+2026-04-16 12:12:52,940 [WARNING] Unknown field: Other financial assets → other_financial_assets
+2026-04-16 12:12:52,940 [WARNING] Unknown field: Deferred tax assets (net) → deferred_tax_assets
+2026-04-16 12:12:52,941 [WARNING] Unknown field: Income iax assets (net) → income_iax_assets
+2026-04-16 12:12:52,941 [WARNING] Unknown field: Other non-current assets → other_non_current_assets
+2026-04-16 12:12:52,941 [WARNING] Unknown field: Investments → investments
+2026-04-16 12:12:52,941 [WARNING] Unknown field: Cash and cash equivalents → cash_cash_equivalents
+2026-04-16 12:12:52,941 [WARNING] Unknown field: Loans → loans
+2026-04-16 12:12:52,942 [WARNING] Unknown field: Other financial assets → other_financial_assets
+2026-04-16 12:12:52,942 [WARNING] Unknown field: Income fax assets (net) → income_fax_assets
+2026-04-16 12:12:52,942 [WARNING] Unknown field: Other current assets → other_current_assets
+2026-04-16 12:12:52,942 [WARNING] Unknown field: Other equity → other_equity
+2026-04-16 12:12:52,942 [WARNING] Unknown field: Total equity → total_equity
+2026-04-16 12:12:52,942 [WARNING] Unknown field: Lease liabilities → lease_liabilities
+2026-04-16 12:12:52,943 [WARNING] Unknown field: Other financial liabilities → other_financial_liabilities
+2026-04-16 12:12:52,943 [WARNING] Unknown field: Deferred tax liabilities (net) → deferred_tax_liabilities
+2026-04-16 12:12:52,943 [WARNING] Unknown field: Other non-current liabilities → other_non_current_liabilities
+2026-04-16 12:12:52,943 [WARNING] Unknown field: Lease liabilities → lease_liabilities
+2026-04-16 12:12:52,943 [WARNING] Unknown field: Total outstanding dues of micro enterprises and small enterprises → total_outstanding_dues_micro_enterprises_small_ent
+2026-04-16 12:12:52,943 [WARNING] Unknown field: Total outstanding dues of creditors other than micro enterprises and small enterprises → total_outstanding_dues_creditors_other_than_micro_
+2026-04-16 12:12:52,944 [WARNING] Unknown field: Other financial liabilities → other_financial_liabilities
+2026-04-16 12:12:52,944 [WARNING] Unknown field: Other current liabilities → other_current_liabilities
+2026-04-16 12:12:52,944 [WARNING] Unknown field: Provisions → provisions
+2026-04-16 12:12:52,944 [WARNING] Unknown field: Income tax liabilities (net) → income_tax_liabilities
+2026-04-16 12:12:52,945 [WARNING] Unknown field: Total equity and liabilities → total_equity_liabilities
+2026-04-16 12:12:52,948 [INFO] Cleaning done — 32 fields

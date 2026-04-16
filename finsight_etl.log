@@ -1,0 +1,4 @@
+2026-04-16 11:10:09,433 [INFO] ════════════════════════════════════════════════════════════
+2026-04-16 11:10:09,433 [INFO] FinSight ETL started — user=1, company=TCS, doc_type=balance_sheet
+2026-04-16 11:10:09,433 [INFO] 📖  Reading Excel…
+2026-04-16 11:10:09,434 [ERROR] Failed to read Excel file: [Errno 2] No such file or directory: 'tcs_balance_sheet.xlsx'
