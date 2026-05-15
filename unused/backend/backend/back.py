@@ -47,12 +47,35 @@ MAX_DYNAMIC_COLUMNS = 120
 # ──────────────────────────────────────────────
 def read_excel(filepath: str, sheet=0) -> pd.DataFrame:
     df = pd.read_excel(filepath, sheet_name=sheet, header=0, dtype=str)
-    df = df.iloc[:, [0, 2, 3]]
-    df.columns = ["particular", "current", "previous"]
-    log.info(f"Excel read OK — {len(df)} rows")
+
+    log.info(f"Excel opened — {df.shape[0]} rows × {df.shape[1]} cols | file='{filepath}'")
+
+    total_cols = df.shape[1]
+
+    if total_cols < 2:
+        raise ValueError(f"File '{filepath}' has only {total_cols} column(s) — need at least 2.")
+
+    if total_cols >= 4:
+        # Balance Sheet layout: col 0 = label, col 2 = current, col 3 = previous
+        col_indices = [0, 2, 3]
+    elif total_cols == 3:
+        # P&L / CFS layout: col 0 = label, col 1 = current, col 2 = previous
+        col_indices = [0, 1, 2]
+    else:
+        # Only 2 columns: label + one value year
+        col_indices = [0, 1]
+
+    df = df.iloc[:, col_indices]
+
+    # Normalize column names regardless of how many were picked
+    if len(col_indices) == 3:
+        df.columns = ["particular", "current", "previous"]
+    else:
+        df.columns = ["particular", "current"]
+        df["previous"] = None  # pad so the rest of the pipeline doesn't break
+
+    log.info(f"Columns mapped — using indices {col_indices} → {list(df.columns)}")
     return df
-
-
 # ──────────────────────────────────────────────
 # MAPPING ENGINE
 # ──────────────────────────────────────────────
@@ -129,19 +152,17 @@ def transform_to_rows(df, user_id, company, current_year, previous_year, documen
     previous_row = {**base, "year": previous_year}
 
     for _, row in df.iterrows():
-        field = str(row["field"]).strip()
+        # Convert to string first, THEN validate — catches pandas NaN-as-string
+        field = str(row["field"]).strip() if pd.notna(row["field"]) else ""
 
-        if not field or field.lower() == "nan":
-            continue
-        if not is_valid_field(field):
+        if not is_valid_field(field):  # now catches "nan", "", single chars, etc.
+            log.debug(f"Skipped invalid field in transform: {repr(field)}")
             continue
 
-        current_row[field] = row["current"]
-        previous_row[field] = row["previous"]
+        current_row[field]  = row["current"]  if pd.notna(row["current"])  else None
+        previous_row[field] = row["previous"] if pd.notna(row["previous"]) else None
 
     return [current_row, previous_row]
-
-
 # ──────────────────────────────────────────────
 # DB HELPERS
 # ──────────────────────────────────────────────
@@ -151,22 +172,13 @@ def get_dynamic_fields(rows):
 
     for row in rows:
         for k in row:
-            k = str(k).strip()
-
-            # 🚨 FINAL FILTER
-            if not k or k.lower() == "nan":
-                continue
-
             if k in IDENTITY:
                 continue
-
-            if not is_valid_field(k):
-                continue
-
-            fields.add(k)
+            # is_valid_field now handles all bad cases including "nan"
+            if is_valid_field(str(k).strip()):
+                fields.add(str(k).strip())
 
     return sorted(fields)
-
 
 def insert_to_mysql(rows, db_config, table="financial_data"):
     IDENTITY = {"user_id", "company", "year", "document_type"}
@@ -246,9 +258,14 @@ def insert_to_mysql(rows, db_config, table="financial_data"):
 # ──────────────────────────────────────────────
 # MAIN
 # ──────────────────────────────────────────────
-def extract_company(file_path):
-    return file_path.split("_")[0].upper()
-
+def extract_company(file_path: str) -> str:
+    # Strip path, extension, then take the part before the first underscore
+    stem = file_path.replace("\\", "/").split("/")[-1]   # filename only
+    stem = stem.rsplit(".", 1)[0]                         # drop extension
+    parts = stem.split("_")
+    # If filename is "tcs_balance_sheet" → "TCS"
+    # If filename is "pnl" or "cfs" → caller should pass company explicitly
+    return parts[0].upper()
 
 def main(user_id, file_path, document_type):
     log.info("=" * 50)

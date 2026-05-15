@@ -42,22 +42,18 @@ def normalize_field(field: str) -> str:
 
 
 # -------- VALIDATION --------
-def is_valid_field(field: str) -> bool:
-    if not field:
+def is_valid_field(val) -> bool:
+    if val is None:
         return False
-    
-    if field.lower() == "nan":
+    s = str(val).strip().lower()
+    # Reject anything that looks like a missing value or is too short
+    if s in ('', 'nan', 'none', 'null', 'nat', '-', '0', 'true', 'false'):
         return False
-
-    if field in SQL_RESERVED:
+    if len(s) <= 1:
         return False
-
-    if re.match(r"^\d", field):
+    # Must start with a letter and contain only alphanumeric + underscores
+    if not re.match(r'^[a-z][a-z0-9_]*$', s):
         return False
-
-    if len(field) <= 1:
-        return False
-
     return True
 
 

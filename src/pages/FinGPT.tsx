@@ -1,15 +1,11 @@
-import { useState } from 'react';
-import FinGPTNavbar from "../components/fingpt/FinGPTNavbar";
-import FinGPTSidebar from "../components/fingpt/FinGPTSidebar";
-import FinGPTOutput from "../components/fingpt/FinGPTOutput";
-import FinGPTPromptEngine from "../components/fingpt/FinGPTPromptEngine";
-
-export type Document = {
-  id: string;
-  label: string;
-  tag: string;
-  size: string;
-};
+import { useEffect, useState } from 'react';
+import FinGPTNavbar from '../components/fingpt/FinGPTNavbar';
+import FinGPTSidebar from '../components/fingpt/FinGPTSidebar';
+import FinGPTOutput from '../components/fingpt/FinGPTOutput';
+import FinGPTPromptEngine from '../components/fingpt/FinGPTPromptEngine';
+import { fetchHealth } from '@/lib/api';
+import { useNotificationsStore } from '@/stores/notificationsStore';
+import { usePromptBridgeStore } from '@/stores/promptBridgeStore';
 
 export type Prompt = {
   id: string;
@@ -17,12 +13,6 @@ export type Prompt = {
   icon: string;
   response: string;
 };
-
-const DOCUMENTS: Document[] = [
-  { id: 'balance', label: 'Balance Sheet', tag: 'Q4 2024', size: '2.4 MB' },
-  { id: 'pnl', label: 'Statement of P&L', tag: 'Q4 2024', size: '1.8 MB' },
-  { id: 'cashflow', label: 'Cash Flow Statement', tag: 'Q4 2024', size: '1.2 MB' },
-];
 
 const PROMPTS: Prompt[] = [
   {
@@ -176,34 +166,92 @@ Think of this company like a well-run household that earns more than it spends, 
   },
 ];
 
+const MD_MIN = 768;
+
 export default function FinGPT() {
-  // Local state: active document selection
-  const [activeDoc, setActiveDoc] = useState<string | null>(null);
-  // Local state: active prompt selection
   const [activePrompt, setActivePrompt] = useState<Prompt | null>(null);
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const publishPrompt = usePromptBridgeStore((s) => s.publishPrompt);
+
+  useEffect(() => {
+    if (sessionStorage.getItem('finsight-health-ping')) return;
+    sessionStorage.setItem('finsight-health-ping', '1');
+    let cancelled = false;
+    (async () => {
+      const ok = await fetchHealth();
+      if (cancelled) return;
+      useNotificationsStore.getState().add({
+        title: ok ? 'Backend connected' : 'Backend unreachable',
+        body: ok
+          ? 'API health check passed.'
+          : 'Start FastAPI (uvicorn) or update the API URL in Settings.',
+        type: ok ? 'success' : 'error',
+      });
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    const mq = window.matchMedia(`(min-width: ${MD_MIN}px)`);
+    const closeIfDesktop = () => {
+      if (mq.matches) setMobileSidebarOpen(false);
+    };
+    closeIfDesktop();
+    mq.addEventListener('change', closeIfDesktop);
+    return () => mq.removeEventListener('change', closeIfDesktop);
+  }, []);
+
+  useEffect(() => {
+    if (!mobileSidebarOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMobileSidebarOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [mobileSidebarOpen]);
+
+  useEffect(() => {
+    if (!mobileSidebarOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [mobileSidebarOpen]);
 
   return (
-    <div className="min-h-screen bg-obsidian text-soft-white flex flex-col overflow-hidden">
-      <FinGPTNavbar />
+    <div className="h-[100dvh] min-h-0 max-h-[100dvh] bg-obsidian text-soft-white flex flex-col overflow-x-hidden overflow-y-hidden">
+      <FinGPTNavbar onMobileMenuClick={() => setMobileSidebarOpen(true)} />
 
-      {/* 3-column workspace */}
-      <div className="flex flex-1 overflow-hidden pt-16 lg:pt-20">
-        {/* LEFT: Document Sidebar */}
-        <FinGPTSidebar
-          documents={DOCUMENTS}
-          activeDoc={activeDoc}
-          onDocSelect={setActiveDoc}
-        />
+      <button
+        type="button"
+        aria-label="Close documents menu"
+        className={`fixed inset-0 z-30 bg-black/60 backdrop-blur-[2px] transition-opacity md:hidden ${
+          mobileSidebarOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+        onClick={() => setMobileSidebarOpen(false)}
+      />
 
-        {/* CENTER: AI Output */}
-        <FinGPTOutput activePrompt={activePrompt} activeDoc={activeDoc} />
+      <div className="flex flex-1 min-h-0 flex-col pt-16 lg:pt-20 overflow-hidden">
+        <div className="flex flex-1 min-h-0 flex-col md:flex-row overflow-hidden max-w-[100vw]">
+          <FinGPTSidebar
+            mobileOpen={mobileSidebarOpen}
+            onMobileClose={() => setMobileSidebarOpen(false)}
+          />
 
-        {/* RIGHT: Prompt Engine */}
-        <FinGPTPromptEngine
-          prompts={PROMPTS}
-          activePrompt={activePrompt}
-          onPromptSelect={setActivePrompt}
-        />
+          <FinGPTOutput activePrompt={activePrompt} />
+
+          <FinGPTPromptEngine
+            prompts={PROMPTS}
+            activePrompt={activePrompt}
+            onPromptSelect={(p, opts) => {
+              setActivePrompt(p);
+              publishPrompt(p.label, !opts?.fillOnly);
+            }}
+          />
+        </div>
       </div>
     </div>
   );
