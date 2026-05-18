@@ -6,7 +6,7 @@ from auth.database import get_db
 from auth.deps import get_current_user
 from auth.models import User
 from auth.schemas import MessageResponse, TokenResponse, UserCreate, UserLogin, UserPublic
-from auth.security import create_access_token, hash_password, verify_password
+from auth.security import UNUSABLE_PASSWORD_HASH, create_access_token, hash_password, verify_password
 
 router = APIRouter(tags=["auth"])
 
@@ -36,7 +36,18 @@ def login(payload: UserLogin, db: Session = Depends(get_db)):
     user = db.query(User).filter(
         or_(User.email == ident_lower, User.username == ident, User.username == ident_lower)
     ).first()
-    if user is None or not verify_password(payload.password, user.hashed_password):
+    if user is None:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect username/email or password")
+
+    if user.auth_provider == "google" and (
+        not user.hashed_password or user.hashed_password == UNUSABLE_PASSWORD_HASH
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="This account uses Google Sign-In. Please continue with Google.",
+        )
+
+    if not user.hashed_password or not verify_password(payload.password, user.hashed_password):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect username/email or password")
 
     token = create_access_token(str(user.id))

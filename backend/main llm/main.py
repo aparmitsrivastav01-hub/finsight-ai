@@ -1,14 +1,21 @@
 import logging
 import os
 from contextlib import asynccontextmanager
-from datetime import datetime, timezone
 
+try:
+    from dotenv import load_dotenv
+
+    load_dotenv()
+except ImportError:
+    pass
+from datetime import datetime, timezone
+from auth.models import User
 from fastapi import Depends, FastAPI, HTTPException, UploadFile, status
 from fastapi.middleware.cors import CORSMiddleware
 
 from auth.database import Base, engine
 from auth.deps import get_current_user
-from auth.models import User
+from auth.google_router import router as google_auth_router
 from auth.router import router as auth_router
 from health_engine import analyze_health
 from history.router import router as history_router
@@ -25,6 +32,9 @@ async def lifespan(_app: FastAPI):
     from history import models as _history_models  # noqa: F401
 
     Base.metadata.create_all(bind=engine)
+    from auth.migrate import run_user_migrations
+
+    run_user_migrations(engine)
     os.makedirs("data/uploaded_pdfs", exist_ok=True)
     yield
 
@@ -35,7 +45,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:5173",
-        "http://127.0.0.1:5173",
+        "https://finsight-ai-ebon.vercel.app",
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -43,6 +53,7 @@ app.add_middleware(
 )
 
 app.include_router(auth_router)
+app.include_router(google_auth_router)
 app.include_router(history_router)
 
 

@@ -10,6 +10,9 @@ ACCESS_TOKEN_EXPIRE_MINUTES = int(os.environ.get("JWT_ACCESS_MINUTES", "1440"))
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+# Placeholder for Google-only accounts on legacy SQLite schemas where password is NOT NULL
+UNUSABLE_PASSWORD_HASH = pwd_context.hash("__google_oauth_no_local_password__")
+
 
 def verify_password(plain: str, hashed: str) -> bool:
     return pwd_context.verify(plain, hashed)

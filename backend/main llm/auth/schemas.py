@@ -17,6 +17,8 @@ class UserPublic(BaseModel):
     id: int
     username: str
     email: EmailStr
+    auth_provider: str = "local"
+    avatar_url: str | None = None
 
     class Config:
         from_attributes = True
@@ -25,6 +27,16 @@ class UserPublic(BaseModel):
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
+
+
+class GoogleAuthRequest(BaseModel):
+    credential: str = Field(..., min_length=10, description="Google ID token from Sign In With Google")
+
+
+class AuthSuccessResponse(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+    user: UserPublic
 
 
 class MessageResponse(BaseModel):

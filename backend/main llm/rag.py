@@ -160,7 +160,6 @@ was retrieved from the uploaded PDF.
         "bankruptcy" in query_lower
         or "bankrupt" in query_lower
         or "financial distress" in query_lower
-        or "risk" in query_lower
     ):
 
         result = run_bankruptcy_engine(context)

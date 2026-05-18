@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
+import { GoogleAuthButton } from '@/components/auth/GoogleAuthButton';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -39,6 +40,17 @@ export default function Login() {
           Fin<span className="text-teal-core">Sight</span>
         </h1>
         <p className="font-body text-sm text-muted-ink mb-6">Sign in to open FinGPT</p>
+
+        <GoogleAuthButton redirectTo={from} />
+
+        <div className="relative my-6">
+          <div className="absolute inset-0 flex items-center" aria-hidden>
+            <span className="w-full border-t border-border-mist" />
+          </div>
+          <div className="relative flex justify-center text-xs uppercase tracking-widest">
+            <span className="bg-deep-slate/80 px-3 text-muted-ink font-mono">or</span>
+          </div>
+        </div>
 
         <form onSubmit={onSubmit} className="space-y-4">
           <div className="space-y-2">

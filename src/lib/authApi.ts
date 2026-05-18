@@ -21,7 +21,14 @@ async function readApiError(res: Response): Promise<string> {
 }
 
 export type TokenResponse = { access_token: string; token_type?: string };
-export type UserPublic = { id: number; username: string; email: string };
+export type UserPublic = {
+  id: number;
+  username: string;
+  email: string;
+  auth_provider?: string;
+  avatar_url?: string | null;
+};
+export type AuthSuccessResponse = TokenResponse & { user: UserPublic };
 
 export const authApi = {
   async register(username: string, email: string, password: string): Promise<UserPublic> {
@@ -79,5 +86,19 @@ export const authApi = {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}` },
     });
+  },
+
+  async loginWithGoogle(credential: string): Promise<AuthSuccessResponse> {
+    const base = getResolvedApiBase();
+    console.info('[authApi] POST /auth/google', { base });
+    const res = await fetch(`${base}/auth/google`, {
+      method: 'POST',
+      headers: jsonHeaders,
+      body: JSON.stringify({ credential }),
+    });
+    if (!res.ok) {
+      throw new Error(await readApiError(res));
+    }
+    return res.json();
   },
 };

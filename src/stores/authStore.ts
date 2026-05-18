@@ -7,6 +7,8 @@ export type AuthUser = {
   id: number;
   username: string;
   email: string;
+  auth_provider?: string;
+  avatar_url?: string | null;
 };
 
 type AuthState = {
@@ -15,6 +17,7 @@ type AuthState = {
   setSession: (token: string, user: AuthUser) => void;
   clearSession: () => void;
   login: (identifier: string, password: string) => Promise<void>;
+  loginWithGoogle: (credential: string) => Promise<void>;
   register: (username: string, email: string, password: string) => Promise<void>;
   fetchMe: () => Promise<void>;
   logout: () => Promise<void>;
@@ -34,6 +37,11 @@ export const useAuthStore = create<AuthState>()(
         const { access_token } = await authApi.login(identifier, password);
         set({ accessToken: access_token });
         await get().fetchMe();
+      },
+
+      loginWithGoogle: async (credential) => {
+        const { access_token, user } = await authApi.loginWithGoogle(credential);
+        set({ accessToken: access_token, user });
       },
 
       register: async (username, email, password) => {
