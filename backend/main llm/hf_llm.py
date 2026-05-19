@@ -1,12 +1,11 @@
 """
-Hugging Face Inference API (serverless) — chat completions for FinGPT /ask flow.
-Uses AsyncInferenceClient for non-blocking calls under FastAPI.
+Hugging Face Inference API (serverless) — text generation for FinGPT /ask flow.
+Uses AsyncInferenceClient.text_generation (api-inference), not chat/completions.
 """
 from __future__ import annotations
 
 import logging
 import os
-from typing import Any
 
 import httpx
 from dotenv import load_dotenv
@@ -19,6 +18,11 @@ logger = logging.getLogger(__name__)
 
 DEFAULT_MODEL = "microsoft/Phi-3-mini-4k-instruct"
 DEFAULT_TIMEOUT_S = float(os.getenv("HF_INFERENCE_TIMEOUT_SECONDS", "120"))
+
+SYSTEM_PROMPT = (
+    "You are a professional financial analyst AI. "
+    "Answer using only the provided financial context when available. Be precise and concise."
+)
 
 
 def _api_token() -> str | None:
@@ -50,7 +54,7 @@ def _message_for_hf_http(exc: HfHubHTTPError) -> str:
         )
     if code == 404:
         logger.warning(
-            "HF inference 404 (model/provider not found) model=%s detail=%s",
+            "HF inference 404 (model not found) model=%s detail=%s",
             _model_id(),
             str(exc)[:400],
         )
@@ -74,33 +78,21 @@ def _message_for_hf_http(exc: HfHubHTTPError) -> str:
     return "Inference request failed. Please try again later."
 
 
-def _extract_answer_text(completion: Any) -> str:
-    choices = getattr(completion, "choices", None)
-    if choices is None and isinstance(completion, dict):
-        choices = completion.get("choices")
-    if not choices:
-        logger.warning("HF malformed response: missing choices: %r", completion)
-        raise ValueError("missing_choices")
-
-    first = choices[0]
-    msg = getattr(first, "message", None)
-    if msg is None and isinstance(first, dict):
-        msg = first.get("message")
-    content = getattr(msg, "content", None) if msg is not None else None
-    if content is None and isinstance(msg, dict):
-        content = msg.get("content")
-    if not isinstance(content, str):
-        content = str(content) if content is not None else ""
-    text = content.strip()
-    if not text:
-        logger.warning("HF malformed response: empty assistant content")
-        raise ValueError("empty_content")
-    return text
+def build_phi3_prompt(context: str, query: str) -> str:
+    """Phi-3-mini-4k-instruct chat template for serverless text_generation."""
+    ctx = (context or "").strip()
+    q = (query or "").strip()
+    user_block = f"Context:\n{ctx}\n\nQuestion:\n{q}\n\nAnswer professionally as a financial AI analyst."
+    return (
+        f"<|system|>\n{SYSTEM_PROMPT}<|end|>\n"
+        f"<|user|>\n{user_block}<|end|>\n"
+        f"<|assistant|>\n"
+    )
 
 
-async def generate_response(prompt: str) -> str:
+async def generate_response(context: str, query: str) -> str:
     """
-    Call HF Inference chat completions. Returns user-facing text (errors as messages, not raises).
+    Call HF Inference text_generation. Returns plain generated text (errors as user messages).
     """
     token = _api_token()
     if not token:
@@ -108,6 +100,8 @@ async def generate_response(prompt: str) -> str:
         return _missing_token_message()
 
     model = _model_id()
+    prompt = build_phi3_prompt(context, query)
+
     client = AsyncInferenceClient(
         model=model,
         token=token,
@@ -115,25 +109,18 @@ async def generate_response(prompt: str) -> str:
     )
 
     logger.debug(
-        "HF inference start model=%s prompt_len=%s",
+        "HF text_generation start model=%s prompt_len=%s",
         model,
-        len(prompt or ""),
+        len(prompt),
     )
 
     try:
-        completion = await client.chat.completions.create(
-            messages=[
-                {
-                    "role": "system",
-                    "content": (
-                        "You are a professional financial analyst AI. "
-                        "Use the context in the user message when present. Be precise and concise."
-                    ),
-                },
-                {"role": "user", "content": prompt},
-            ],
-            max_tokens=800,
+        text = await client.text_generation(
+            prompt,
+            max_new_tokens=800,
             temperature=0.3,
+            return_full_text=False,
+            do_sample=True,
         )
     except InferenceTimeoutError as exc:
         logger.warning("HF inference timeout: %s", exc)
@@ -153,13 +140,12 @@ async def generate_response(prompt: str) -> str:
         logger.exception("HF inference unexpected failure: %s", exc)
         return "An unexpected error occurred during inference. Please try again later."
 
-    try:
-        text = _extract_answer_text(completion)
-    except ValueError:
+    if not isinstance(text, str):
+        text = str(text) if text is not None else ""
+    text = text.strip()
+    if not text:
+        logger.warning("HF text_generation returned empty output")
         return "The model returned an unexpected or empty response. Please try again."
-    except (AttributeError, KeyError, IndexError, TypeError) as exc:
-        logger.warning("HF response parse error: %s raw=%r", exc, completion)
-        return "Could not parse the model response. Please try again."
 
-    logger.info("HF inference done model=%s response_len=%s", model, len(text))
+    logger.info("HF text_generation done model=%s response_len=%s", model, len(text))
     return text

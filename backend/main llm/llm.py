@@ -4,14 +4,4 @@ from hf_llm import generate_response
 
 
 async def generate_answer(context, query):
-    prompt = f"""
-Context:
-{context}
-
-Question:
-{query}
-
-Answer professionally as a financial AI analyst.
-"""
-
-    return await generate_response(prompt)
+    return await generate_response(context, query)
