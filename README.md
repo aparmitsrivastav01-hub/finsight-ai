@@ -1,6 +1,15 @@
+---
+title: finsight-ai
+emoji: 🚀
+colorFrom: blue
+colorTo: purple
+sdk: docker
+pinned: false
+---
+
 # FinSight FinGPT
 
-Financial document Q&A with RAG (ChromaDB + sentence-transformers) and Hugging Face Inference (`microsoft/Phi-3-mini-4k-instruct`).
+FinSight is a financial document Q&A API: upload PDF statements, retrieve context with ChromaDB + embeddings, and get analyst-style answers via Hugging Face Inference (`microsoft/Phi-3-mini-4k-instruct`). FastAPI backend on port **7860**; connect the Vercel frontend with `VITE_API_URL`.
 
 ## Deploy backend on Hugging Face Spaces (Docker)
 
