@@ -4,3 +4,7 @@ __pycache__/
 node_modules/
 dist/
 *.db
+backend/main llm/data/
+*.sqlite3
+*.bin
+*.pdf
