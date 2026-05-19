@@ -3,17 +3,14 @@ Hugging Face Inference API (serverless) — text generation for FinGPT /ask flow
 Uses AsyncInferenceClient.text_generation (api-inference), not chat/completions.
 """
 from __future__ import annotations
-
 import logging
 import os
-
 import httpx
 from dotenv import load_dotenv
 from huggingface_hub import AsyncInferenceClient
 from huggingface_hub.errors import HfHubHTTPError, InferenceTimeoutError, OverloadedError
 
 load_dotenv()
-
 logger = logging.getLogger(__name__)
 
 DEFAULT_MODEL = "HuggingFaceH4/zephyr-7b-beta"
@@ -63,23 +60,18 @@ def _message_for_hf_http(exc: HfHubHTTPError) -> str:
         return _inference_unavailable_message(
             f"model {model!r} is not available on the free Inference API"
         )
-
     if code == 429 or "rate limit" in detail or "too many requests" in detail:
         logger.warning("HF inference rate limited model=%s: %s", model, str(exc)[:400])
         return _inference_unavailable_message("rate limit reached — try again shortly")
-
     if code in (502, 503, 504) or "overloaded" in detail or "loading" in detail:
         logger.warning("HF inference overload HTTP %s model=%s: %s", code, model, str(exc)[:400])
         return _inference_unavailable_message("service overloaded or still loading")
-
     if code == 400 and "not supported" in detail:
         logger.warning("HF inference 400 model=%s: %s", model, str(exc)[:500])
         return _inference_unavailable_message("model not supported on Inference API")
-
     if code in (401, 403):
         logger.warning("HF inference auth failed HTTP %s", code)
         return "Hugging Face rejected the API token. Verify HF_API_TOKEN in Space secrets."
-
     if code is not None:
         logger.warning("HF inference HTTP %s model=%s: %s", code, model, str(exc)[:400])
         return _inference_unavailable_message(f"HTTP {code}")
@@ -112,12 +104,6 @@ async def generate_response(context: str, query: str) -> str:
     model = _model_id()
     prompt = build_inference_prompt(context, query)
 
-    client = AsyncInferenceClient(
-        model=model,
-        token=token,
-        timeout=DEFAULT_TIMEOUT_S,
-    )
-
     logger.debug(
         "HF text_generation start model=%s prompt_len=%s",
         model,
@@ -125,13 +111,25 @@ async def generate_response(context: str, query: str) -> str:
     )
 
     try:
-        text = await client.text_generation(
-            prompt,
-            max_new_tokens=800,
-            temperature=0.3,
-            return_full_text=False,
-            do_sample=True,
-        )
+        # FIX 1: Use `async with` for proper connection cleanup.
+        # FIX 2: Pass `details=False` — prevents the SDK from trying to parse
+        #         a GenerationDetails object that comes back None when the model
+        #         is cold-starting or the response is malformed, which is what
+        #         causes `'NoneType' object is not subscriptable`.
+        async with AsyncInferenceClient(
+            model=model,
+            token=token,
+            timeout=DEFAULT_TIMEOUT_S,
+        ) as client:
+            raw = await client.text_generation(
+                prompt,
+                max_new_tokens=800,
+                temperature=0.3,
+                return_full_text=False,
+                do_sample=True,
+                details=False,  # <-- KEY FIX: avoids NoneType subscript on details parsing
+            )
+
     except InferenceTimeoutError as exc:
         logger.warning("HF inference timeout model=%s: %s", model, exc)
         return _inference_unavailable_message("request timed out")
@@ -147,12 +145,18 @@ async def generate_response(context: str, query: str) -> str:
         logger.warning("HF network failure model=%s: %s", model, exc)
         return _inference_unavailable_message("could not reach Hugging Face")
     except Exception as exc:
-        logger.warning("HF inference failure model=%s: %s", model, exc)
+        # FIX 3: Log the full traceback so future failures are diagnosable.
+        logger.warning("HF inference failure model=%s: %s", model, exc, exc_info=True)
         return _inference_unavailable_message("unexpected error")
 
-    if not isinstance(text, str):
-        text = str(text) if text is not None else ""
+    # FIX 4: Guard against None/non-string before calling .strip()
+    if raw is None:
+        logger.warning("HF text_generation returned None model=%s", model)
+        return _inference_unavailable_message("empty model response")
+
+    text = raw if isinstance(raw, str) else str(raw)
     text = text.strip()
+
     if not text:
         logger.warning("HF text_generation returned empty output model=%s", model)
         return _inference_unavailable_message("empty model response")
