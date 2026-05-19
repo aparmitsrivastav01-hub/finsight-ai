@@ -13,7 +13,7 @@ from huggingface_hub.errors import HfHubHTTPError, InferenceTimeoutError, Overlo
 load_dotenv()
 logger = logging.getLogger(__name__)
 
-DEFAULT_MODEL = "HuggingFaceH4/zephyr-7b-beta"
+DEFAULT_MODEL = "google/flan-t5-large"
 DEFAULT_TIMEOUT_S = float(os.getenv("HF_INFERENCE_TIMEOUT_SECONDS", "120"))
 
 SYSTEM_PROMPT = (
