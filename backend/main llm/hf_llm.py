@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 # Override via HF_MODEL env var. Other working options:
 #   "HuggingFaceH4/zephyr-7b-gemma-v0.1"
 #   "mistralai/Mistral-7B-Instruct-v0.2"
-DEFAULT_MODEL = os.getenv("HF_MODEL")
+DEFAULT_MODEL = "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B:nscale"
 DEFAULT_TIMEOUT_S = float(os.getenv("HF_INFERENCE_TIMEOUT_SECONDS", "120"))
 
 SYSTEM_PROMPT = (
@@ -55,7 +55,12 @@ def _api_token() -> str | None:
 
 
 def _model_id() -> str:
-    return (os.getenv("HF_MODEL") or DEFAULT_MODEL).strip()
+    model = os.getenv("HF_MODEL") or DEFAULT_MODEL
+
+    if not model:
+        raise RuntimeError("HF model is not configured")
+
+    return model.strip()
 
 
 def _missing_token_message() -> str:
