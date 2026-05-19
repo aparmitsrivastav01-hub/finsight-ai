@@ -1,0 +1,13 @@
+node_modules
+dist
+.git
+.cursor
+**/__pycache__
+**/*.pyc
+.env
+backend/main llm/.env
+backend/main llm/finsight_users.db
+backend/main llm/data/uploaded_pdfs/*
+unused
+agent-tools
+terminals

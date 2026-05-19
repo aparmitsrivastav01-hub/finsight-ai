@@ -34,6 +34,11 @@ export const useSettingsStore = create<SettingsState>()(
   )
 );
 
+/**
+ * API base URL for FinGPT backend.
+ * Production (HF Spaces): set VITE_API_URL=https://YOUR-SPACE.hf.space (no trailing slash).
+ * Local backend: http://127.0.0.1:8000 — HF Spaces Docker: http://127.0.0.1:7860
+ */
 export function getResolvedApiBase(): string {
   const custom = useSettingsStore.getState().apiBaseUrl?.trim();
   if (custom) return normalizeBase(custom);

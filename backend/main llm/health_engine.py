@@ -34,13 +34,11 @@ def _latest_pdf_path() -> str | None:
 
 def _read_pdf_text(path: str) -> str:
     try:
-        from unstructured.partition.pdf import partition_pdf
+        from pdf_text_extract import extract_pdf_text
 
-        elements = partition_pdf(filename=path, strategy="hi_res", infer_table_structure=True)
-        return "\n".join(getattr(el, "text", "") or "" for el in elements)
+        return extract_pdf_text(path)
     except Exception:
-        with open(path, "rb") as f:
-            return f.read().decode("utf-8", errors="ignore")
+        return ""
 
 
 def _metric_coverage_score(metrics: dict[str, float]) -> int:

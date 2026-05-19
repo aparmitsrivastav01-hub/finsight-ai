@@ -1,4 +1,5 @@
 import logging
+import os
 
 import chromadb
 
@@ -9,13 +10,16 @@ from bankruptcy_engine.bankruptcy_engine import run_bankruptcy_engine
 
 logger = logging.getLogger(__name__)
 
-# -----------------------------
-# CHROMADB SETUP
-# -----------------------------
-client = chromadb.Client()
+CHROMA_PATH = os.getenv("CHROMA_PERSIST_DIR", "data/chroma")
+COLLECTION_NAME = os.getenv("CHROMA_COLLECTION", "finance")
+
+os.makedirs(CHROMA_PATH, exist_ok=True)
+
+# Persistent client survives restarts when /data is mounted (HF Spaces volume)
+client = chromadb.PersistentClient(path=CHROMA_PATH)
 
 collection = client.get_or_create_collection(
-    name="finance"
+    name=COLLECTION_NAME
 )
 
 

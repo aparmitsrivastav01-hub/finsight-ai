@@ -44,17 +44,39 @@ async def lifespan(_app: FastAPI):
 
     run_user_migrations(engine)
     os.makedirs("data/uploaded_pdfs", exist_ok=True)
+    os.makedirs(os.getenv("CHROMA_PERSIST_DIR", "data/chroma"), exist_ok=True)
+    db_path = os.environ.get("FINSIGHT_SQLITE_PATH")
+    if db_path:
+        parent = os.path.dirname(os.path.abspath(db_path))
+        if parent:
+            os.makedirs(parent, exist_ok=True)
+
+    if os.getenv("PRELOAD_EMBEDDING_MODEL", "").lower() in ("1", "true", "yes"):
+        from embeddings import preload_embedding_model
+
+        preload_embedding_model()
+        logger.info("Embedding model preloaded at startup")
+
     yield
 
 
 app = FastAPI(title="FinSight FinGPT API", lifespan=lifespan)
 
+
+def _cors_origins() -> list[str]:
+    raw = os.getenv("CORS_ALLOW_ORIGINS", "").strip()
+    if raw:
+        return [o.strip() for o in raw.split(",") if o.strip()]
+    return [
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "https://finsight-ai-ebon.vercel.app",
+    ]
+
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "https://finsight-ai-ebon.vercel.app",
-    ],
+    allow_origins=_cors_origins(),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

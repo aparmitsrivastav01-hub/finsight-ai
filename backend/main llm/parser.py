@@ -1,19 +1,15 @@
-from unstructured.partition.pdf import partition_pdf
-from unstructured.chunking.title import chunk_by_title
+import logging
+
+from pdf_text_extract import chunk_text, extract_pdf_text
+
+logger = logging.getLogger(__name__)
 
 
-def parse_pdf(path):
-    elements = partition_pdf(
-        filename=path,
-        strategy="hi_res",
-        infer_table_structure=True
-    )
-
-    chunks = chunk_by_title(
-        elements,
-        max_characters=3000,
-        new_after_n_chars=2400,
-        combine_text_under_n_chars=500
-    )
-
+def parse_pdf(path: str) -> list[str]:
+    text = extract_pdf_text(path)
+    if not text:
+        logger.warning("No text extracted from PDF: %s", path)
+        return []
+    chunks = chunk_text(text)
+    logger.info("Parsed PDF %s into %s chunks", path, len(chunks))
     return chunks
