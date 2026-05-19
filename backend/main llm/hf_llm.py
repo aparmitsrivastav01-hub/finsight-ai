@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 # Override via HF_MODEL env var. Other working options:
 #   "HuggingFaceH4/zephyr-7b-gemma-v0.1"
 #   "mistralai/Mistral-7B-Instruct-v0.2"
-DEFAULT_MODEL = "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B:nscale"
+DEFAULT_MODEL = os.getenv("HF_MODEL")
 DEFAULT_TIMEOUT_S = float(os.getenv("HF_INFERENCE_TIMEOUT_SECONDS", "120"))
 
 SYSTEM_PROMPT = (
