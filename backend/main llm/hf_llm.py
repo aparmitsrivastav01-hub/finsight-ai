@@ -5,13 +5,13 @@ Uses AsyncInferenceClient.chat_completion (modern Messages API).
 NOTE: text_generation() is being phased out on the free HF serverless tier;
 chat_completion() is the stable replacement and works with current free models.
 """
+
 from __future__ import annotations
 import logging
 import os
 import httpx
 from dotenv import load_dotenv
-from huggingface_hub import AsyncInferenceClient
-from huggingface_hub.errors import HfHubHTTPError, InferenceTimeoutError, OverloadedError
+from openai import AsyncOpenAI
 
 load_dotenv()
 logger = logging.getLogger(__name__)
@@ -171,82 +171,48 @@ def build_inference_prompt(context: str, query: str) -> str:
 
 async def generate_response(context: str, query: str) -> str:
     """
-    Call HF Inference chat_completion. Returns plain text (errors as user messages).
-
-    Uses chat_completion() instead of the deprecated text_generation() endpoint,
-    which has been removed for most models on the free HF serverless tier.
+    Uses Hugging Face Router API through OpenAI-compatible SDK.
     """
+
     token = _api_token()
+
     if not token:
-        logger.error("HF_TOKEN (or HF_API_KEY) is not set")
+        logger.error("HF_TOKEN is not set")
         return _missing_token_message()
 
     model = _model_id()
     messages = build_messages(context, query)
 
-    logger.debug("HF chat_completion start model=%s", model)
+    logger.info("HF router request model=%s", model)
 
     try:
-        async with AsyncInferenceClient(
-            model=model,
-            token=token,
-            timeout=DEFAULT_TIMEOUT_S,
-        ) as client:
-            response = await client.chat_completion(
-                messages=messages,
-                max_tokens=2048,
-                temperature=0.3,
-            )
-
-    except InferenceTimeoutError as exc:
-        logger.warning("HF inference timeout model=%s: %s", model, exc)
-        return _inference_unavailable_message("request timed out")
-    except OverloadedError as exc:
-        logger.warning("HF inference overloaded model=%s: %s", model, exc)
-        return _inference_unavailable_message("service overloaded")
-    except HfHubHTTPError as exc:
-        return _message_for_hf_http(exc)
-    except httpx.TimeoutException:
-        logger.warning("HF HTTP client timed out model=%s", model)
-        return _inference_unavailable_message("network timeout")
-    except httpx.RequestError as exc:
-        logger.warning("HF network failure model=%s: %s", model, exc)
-        return _inference_unavailable_message("could not reach Hugging Face")
-    except TypeError as exc:
-        # Catch the HF SDK bug where a 404 with empty body raises TypeError
-        # before HfHubHTTPError. Retained as a safety net even though we now
-        # use chat_completion() — the same SDK code path exists there too.
-        if _is_sdk_404_bug(exc):
-            logger.warning(
-                "HF inference 404 (SDK bug: empty error payload) model=%s", model
-            )
-            return _inference_unavailable_message(
-                f"model {model!r} is not available on the free Inference API — "
-                "set HF_MODEL to 'mistralai/Mistral-7B-Instruct-v0.3'"
-            )
-        logger.error("Unexpected TypeError in generate_response", exc_info=True)
-        raise
-    except Exception as exc:
-        logger.warning("HF inference failure model=%s: %s", model, exc, exc_info=True)
-        return _inference_unavailable_message("unexpected error")
-
-    # Extract text from ChatCompletionOutput
-    try:
-        text = response.choices[0].message.content
-    except (AttributeError, IndexError, TypeError) as exc:
-        logger.warning(
-            "HF chat_completion unexpected response shape model=%s: %s — raw=%r",
-            model, exc, response,
+        client = AsyncOpenAI(
+            base_url="https://router.huggingface.co/v1",
+            api_key=token,
         )
-        return _inference_unavailable_message("malformed model response")
 
-    if not isinstance(text, str):
-        text = str(text) if text is not None else ""
-    text = text.strip()
+        response = await client.chat.completions.create(
+            model=model,
+            messages=messages,
+            temperature=0.3,
+            max_tokens=2048,
+        )
 
-    if not text:
-        logger.warning("HF chat_completion returned empty output model=%s", model)
-        return _inference_unavailable_message("empty model response")
+        text = response.choices[0].message.content
 
-    logger.info("HF chat_completion done model=%s response_len=%s", model, len(text))
-    return text
+        if not text:
+            return _inference_unavailable_message("empty model response")
+
+        text = text.strip()
+
+        logger.info(
+            "HF router response success model=%s response_len=%s",
+            model,
+            len(text),
+        )
+
+        return text
+
+    except Exception as exc:
+        logger.exception("HF router inference failed: %s", exc)
+        return _inference_unavailable_message(str(exc))
