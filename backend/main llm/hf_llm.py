@@ -20,13 +20,27 @@ logger = logging.getLogger(__name__)
 # Override via HF_MODEL env var. Other working options:
 #   "HuggingFaceH4/zephyr-7b-gemma-v0.1"
 #   "mistralai/Mistral-7B-Instruct-v0.2"
-DEFAULT_MODEL = "mistralai/Mistral-7B-Instruct-v0.3"
+DEFAULT_MODEL = os.getenv("HF_MODEL")
 DEFAULT_TIMEOUT_S = float(os.getenv("HF_INFERENCE_TIMEOUT_SECONDS", "120"))
 
 SYSTEM_PROMPT = (
-    "You are a professional financial analyst AI. "
-    "Answer using only the provided financial context when available. "
-    "Be precise and concise."
+ """
+You are a professional financial analyst AI.
+
+Analyze the provided financial report deeply and thoroughly.
+
+Give:
+- key observations
+- risks
+- trends
+- profitability analysis
+- balance sheet insights
+- investor perspective
+- red flags
+- opportunities
+
+Use detailed bullet points and explanations.
+"""
 )
 
 
@@ -35,8 +49,8 @@ SYSTEM_PROMPT = (
 # ---------------------------------------------------------------------------
 
 def _api_token() -> str | None:
-    """Prefer HF_API_TOKEN; HF_API_KEY kept for older deployments."""
-    raw = (os.getenv("HF_API_TOKEN") or os.getenv("HF_API_KEY") or "").strip()
+    """Prefer HF_TOKEN; HF_API_KEY kept for older deployments."""
+    raw = (os.getenv("HF_TOKEN") or os.getenv("HF_API_KEY") or "").strip()
     return raw or None
 
 
@@ -46,7 +60,7 @@ def _model_id() -> str:
 
 def _missing_token_message() -> str:
     return (
-        "Inference is not configured: set HF_API_TOKEN in the server environment "
+        "Inference is not configured: set HF_TOKEN in the server environment "
         "(see .env for local development)."
     )
 
@@ -106,7 +120,7 @@ def _message_for_hf_http(exc: HfHubHTTPError) -> str:
         return _inference_unavailable_message("model not supported on Inference API")
     if code in (401, 403):
         logger.warning("HF inference auth failed HTTP %s", code)
-        return "Hugging Face rejected the API token. Verify HF_API_TOKEN in Space secrets."
+        return "Hugging Face rejected the API token. Verify HF_TOKEN in Space secrets."
     if code is not None:
         logger.warning("HF inference HTTP %s model=%s: %s", code, model, str(exc)[:400])
         return _inference_unavailable_message(f"HTTP {code}")
@@ -159,7 +173,7 @@ async def generate_response(context: str, query: str) -> str:
     """
     token = _api_token()
     if not token:
-        logger.error("HF_API_TOKEN (or HF_API_KEY) is not set")
+        logger.error("HF_TOKEN (or HF_API_KEY) is not set")
         return _missing_token_message()
 
     model = _model_id()
@@ -175,7 +189,7 @@ async def generate_response(context: str, query: str) -> str:
         ) as client:
             response = await client.chat_completion(
                 messages=messages,
-                max_tokens=800,
+                max_tokens=2048,
                 temperature=0.3,
             )
 
