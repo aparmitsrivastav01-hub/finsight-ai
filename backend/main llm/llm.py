@@ -1,29 +1,17 @@
-from langchain_community.llms import Ollama
+"""LLM bridge: RAG context + user query → Hugging Face Inference (see hf_llm)."""
 
-llm = Ollama(model="deepseek-r1")
+from hf_llm import generate_response
 
 
-def generate_answer(context, query):
-
+async def generate_answer(context, query):
     prompt = f"""
-You are FinSight AI.
-
-Answer ONLY using the financial context below.
-
-If the context mentions:
-- net loss
-- operating loss
-- accumulated deficit
-
-then clearly state the company is in loss.
-
-CONTEXT:
+Context:
 {context}
 
-QUESTION:
+Question:
 {query}
 
-ANSWER:
+Answer professionally as a financial AI analyst.
 """
 
-    return llm.invoke(prompt)
+    return await generate_response(prompt)

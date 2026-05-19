@@ -8,6 +8,14 @@ try:
     load_dotenv()
 except ImportError:
     pass
+
+# Root logging for API + inference modules (override with LOG_LEVEL=DEBUG)
+if not logging.root.handlers:
+    logging.basicConfig(
+        level=getattr(logging, os.getenv("LOG_LEVEL", "INFO").upper(), logging.INFO),
+        format="%(asctime)s %(levelname)s [%(name)s] %(message)s",
+    )
+
 from datetime import datetime, timezone
 from auth.models import User
 from fastapi import Depends, FastAPI, HTTPException, UploadFile, status
@@ -196,14 +204,14 @@ def _save_query_history(user_id: int, query: str, answer: str) -> None:
 
 
 @app.get("/ask")
-def ask(
+async def ask(
     query: str,
     user: User = Depends(get_current_user),
 ):
     if not query or not query.strip():
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Query is required")
     q = query.strip()
-    answer = ask_question(q)
+    answer = await ask_question(q)
 
     try:
         _save_query_history(user.id, q, answer)

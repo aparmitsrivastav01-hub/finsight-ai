@@ -1,12 +1,13 @@
+import logging
+
 import chromadb
 
 from embeddings import embed_texts
 from llm import generate_answer
 
-from bankruptcy_engine.bankruptcy_engine import (
-    run_bankruptcy_engine
-)
+from bankruptcy_engine.bankruptcy_engine import run_bankruptcy_engine
 
+logger = logging.getLogger(__name__)
 
 # -----------------------------
 # CHROMADB SETUP
@@ -73,11 +74,11 @@ def clear_collection():
                 ids=existing["ids"]
             )
 
-            print("\nOLD CHUNKS CLEARED\n")
+            logger.info("ChromaDB: cleared %s prior chunk ids", len(existing["ids"]))
 
     except Exception as e:
 
-        print(f"\nCLEAR ERROR: {e}\n")
+        logger.warning("ChromaDB clear_collection error: %s", e)
 
 
 # -----------------------------
@@ -96,11 +97,14 @@ def store_chunks(chunks):
 
         statement_type = classify_statement(doc)
 
+        row_emb = embeddings[i]
+        emb_list = row_emb.tolist() if hasattr(row_emb, "tolist") else list(row_emb)
+
         collection.add(
 
             documents=[doc],
 
-            embeddings=[embeddings[i]],
+            embeddings=[emb_list],
 
             metadatas=[
                 {
@@ -111,28 +115,49 @@ def store_chunks(chunks):
             ids=[str(i)]
         )
 
-    print(f"\nSTORED {len(docs)} CHUNKS\n")
+    logger.info("ChromaDB: stored %s chunks with embeddings", len(docs))
 
 
 # -----------------------------
-# RETRIEVE RELEVANT CHUNKS
+# RETRIEVE RELEVANT CHUNKS (semantic)
 # -----------------------------
-def retrieve(query):
+def retrieve(query: str, n_results: int = 8):
+    """
+    Query Chroma with the same embedding model used at index time (sentence-transformers).
+    """
+    try:
+        n_total = collection.count()
+    except Exception as exc:
+        logger.error("ChromaDB count failed: %s", exc)
+        return []
 
-    results = collection.get()
+    if n_total == 0:
+        logger.info("ChromaDB: empty collection, nothing to retrieve")
+        return []
 
-    docs = results["documents"]
+    try:
+        q_vec = embed_texts([query])
+        first = q_vec[0]
+        query_embedding = first.tolist() if hasattr(first, "tolist") else list(first)
+        k = min(max(1, n_results), n_total)
+        results = collection.query(
+            query_embeddings=[query_embedding],
+            n_results=k,
+        )
+    except Exception as exc:
+        logger.exception("ChromaDB query failed: %s", exc)
+        return []
 
-    print("\nRETRIEVED DOC COUNT:")
-    print(len(docs))
-
+    docs_nested = results.get("documents") or []
+    docs = docs_nested[0] if docs_nested else []
+    logger.debug("ChromaDB: retrieved %s chunks for query_len=%s", len(docs), len(query or ""))
     return docs
 
 
 # -----------------------------
 # MAIN QUESTION FUNCTION
 # -----------------------------
-def ask_question(query):
+async def ask_question(query):
 
     query_lower = query.lower()
 
@@ -150,8 +175,7 @@ was retrieved from the uploaded PDF.
 
     context = "\n\n".join(docs)
 
-    print("\nRETRIEVED CONTEXT:\n")
-    print(context[:5000])
+    logger.debug("RAG context preview (chars=%s): %s", len(context), context[:500])
 
     # -------------------------
     # BANKRUPTCY PATH
@@ -178,9 +202,9 @@ Metrics:
     # -------------------------
     # NORMAL RAG PATH
     # -------------------------
-    answer = generate_answer(
+    answer = await generate_answer(
         context,
-        query
+        query,
     )
 
     return answer
