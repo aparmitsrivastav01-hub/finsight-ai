@@ -16,7 +16,7 @@ load_dotenv()
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_MODEL = "google/gemma-3-27b-it"
+DEFAULT_MODEL = "HuggingFaceH4/zephyr-7b-beta"
 DEFAULT_TIMEOUT_S = float(os.getenv("HF_INFERENCE_TIMEOUT_SECONDS", "120"))
 
 SYSTEM_PROMPT = (
@@ -57,24 +57,34 @@ def _message_for_hf_http(exc: HfHubHTTPError) -> str:
     code = getattr(resp, "status_code", None) if resp is not None else None
     detail = str(exc).lower()
     model = _model_id()
+
+    if code == 404 or "not found" in detail:
+        logger.warning("HF inference 404 model=%s: %s", model, str(exc)[:400])
+        return _inference_unavailable_message(
+            f"model {model!r} is not available on the free Inference API"
+        )
+
+    if code == 429 or "rate limit" in detail or "too many requests" in detail:
+        logger.warning("HF inference rate limited model=%s: %s", model, str(exc)[:400])
+        return _inference_unavailable_message("rate limit reached — try again shortly")
+
+    if code in (502, 503, 504) or "overloaded" in detail or "loading" in detail:
+        logger.warning("HF inference overload HTTP %s model=%s: %s", code, model, str(exc)[:400])
+        return _inference_unavailable_message("service overloaded or still loading")
+
     if code == 400 and "not supported" in detail:
         logger.warning("HF inference 400 model=%s: %s", model, str(exc)[:500])
         return _inference_unavailable_message("model not supported on Inference API")
-    if code == 404:
-        logger.warning("HF inference 404 model=%s: %s", model, str(exc)[:400])
-        return _inference_unavailable_message(
-            f"model {model!r} was not found on Hugging Face Inference"
-        )
-    if code in (502, 503, 504):
-        logger.warning("HF inference unavailable HTTP %s model=%s: %s", code, model, str(exc)[:400])
-        return _inference_unavailable_message("service overloaded or still loading")
+
     if code in (401, 403):
         logger.warning("HF inference auth failed HTTP %s", code)
         return "Hugging Face rejected the API token. Verify HF_API_TOKEN in Space secrets."
+
     if code is not None:
         logger.warning("HF inference HTTP %s model=%s: %s", code, model, str(exc)[:400])
         return _inference_unavailable_message(f"HTTP {code}")
-    logger.warning("HF inference HTTP error model=%s: %s", model, exc)
+
+    logger.warning("HF inference HTTP error model=%s: %s", model, str(exc)[:400])
     return _inference_unavailable_message("unexpected API error")
 
 
@@ -137,7 +147,7 @@ async def generate_response(context: str, query: str) -> str:
         logger.warning("HF network failure model=%s: %s", model, exc)
         return _inference_unavailable_message("could not reach Hugging Face")
     except Exception as exc:
-        logger.exception("HF inference unexpected failure model=%s: %s", model, exc)
+        logger.warning("HF inference failure model=%s: %s", model, exc)
         return _inference_unavailable_message("unexpected error")
 
     if not isinstance(text, str):
