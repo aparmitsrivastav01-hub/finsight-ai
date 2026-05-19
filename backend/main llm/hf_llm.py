@@ -43,10 +43,10 @@ def _message_for_hf_http(exc: HfHubHTTPError) -> str:
     code = getattr(resp, "status_code", None) if resp is not None else None
     detail = str(exc).lower()
     if code == 400 and "not supported" in detail:
-        logger.warning("HF inference 400 (model/provider): %s", str(exc)[:500])
+        logger.warning("HF inference 400 (model): %s", str(exc)[:500])
         return (
-            "This model is not available on the selected Hugging Face inference provider (400). "
-            "Set HF_INFERENCE_PROVIDER=auto (default) or pick a provider listed for your model on Hugging Face."
+            "This model is not available on Hugging Face Inference (400). "
+            "Check HF_MODEL or use a model enabled for serverless inference."
         )
     if code == 404:
         logger.warning(
@@ -108,24 +108,20 @@ async def generate_response(prompt: str) -> str:
         return _missing_token_message()
 
     model = _model_id()
-    # "auto" picks a Hugging Face–routed provider that serves the model (Phi-3 is not on hf-inference only).
-    prov = (os.getenv("HF_INFERENCE_PROVIDER") or "auto").strip() or "auto"
     client = AsyncInferenceClient(
-        api_key=token,
-        provider=prov,  # type: ignore[arg-type]
+        model=model,
+        token=token,
         timeout=DEFAULT_TIMEOUT_S,
     )
 
     logger.debug(
-        "HF inference start model=%s provider=%s prompt_len=%s",
+        "HF inference start model=%s prompt_len=%s",
         model,
-        prov,
         len(prompt or ""),
     )
 
     try:
         completion = await client.chat.completions.create(
-            model=model,
             messages=[
                 {
                     "role": "system",
