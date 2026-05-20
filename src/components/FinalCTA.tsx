@@ -52,14 +52,14 @@ export default function FinalCTA() {
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-14">
           <a
-            href="#signup"
+            href="/register"
             className="group inline-flex items-center gap-2.5 px-8 py-4 bg-teal-core text-obsidian font-sans font-semibold text-base rounded-xl hover:bg-electric-teal transition-all duration-200 shadow-teal-glow hover:shadow-teal-glow-lg animate-glow-pulse"
           >
             Create Free Account
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
           </a>
           <a
-            href="#login"
+            href="/login"
             className="group inline-flex items-center gap-2 px-8 py-4 bg-white/5 text-soft-white font-sans font-semibold text-base rounded-xl border border-border-mist hover:border-teal-core/40 hover:bg-white/8 transition-all duration-200"
           >
             Already have an account? Login

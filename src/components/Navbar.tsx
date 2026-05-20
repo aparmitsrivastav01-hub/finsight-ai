@@ -75,7 +75,7 @@ export default function Navbar() {
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-3">
             <a
-              href="#login"
+              href="/login"
               className="px-5 py-2 text-sm text-teal-core border border-teal-core/40 rounded-lg hover:bg-teal-core hover:text-obsidian transition"
             >
               Login
