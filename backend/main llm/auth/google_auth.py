@@ -19,11 +19,13 @@ def verify_google_id_token(token: str) -> dict:
             token,
             google_requests.Request(),
             GOOGLE_CLIENT_ID,
+            clock_skew_in_seconds=10,    
         )
     except ValueError as exc:
+        print("GOOGLE VERIFY ERROR:", repr(exc))
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid or expired Google token",
+            detail=str(exc),
         ) from exc
 
     if idinfo.get("iss") not in ("accounts.google.com", "https://accounts.google.com"):
