@@ -53,14 +53,14 @@ export const useAuthStore = create<AuthState>()(
         const token = get().accessToken;
         if (!token) {
           set({ user: null });
-          console.info('[auth] fetchMe skipped — no access token');
+          // console.info('[auth] fetchMe skipped — no access token');
           return;
         }
         try {
-          console.info('[auth] fetchMe → GET /me');
+          // console.info('[auth] fetchMe → GET /me');
           const user = await authApi.me(token);
           set({ user });
-          console.info('[auth] fetchMe ok', { userId: user.id, username: user.username });
+          // console.info('[auth] fetchMe ok', { userId: user.id, username: user.username });
         } catch (e) {
           console.warn('[auth] fetchMe failed — clearing session', e);
           set({ accessToken: null, user: null });
@@ -77,7 +77,7 @@ export const useAuthStore = create<AuthState>()(
           }
         }
         get().clearSession();
-        console.info('[auth] logout — session cleared');
+        // console.info('[auth] logout — session cleared');
       },
     }),
     {

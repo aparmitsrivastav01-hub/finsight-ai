@@ -1,3 +1,8 @@
+/*
+ * LEGACY — not used by the app (entry is src/main.tsx + src/App.tsx).
+ * Imports missing components (leftsidebar, mainpanel, promptpanel).
+ * Kept commented out after code audit.
+ *
 import { useState } from 'react'
 import LeftSidebar from './leftsidebar'
 import MainPanel from './mainpanel'
@@ -19,4 +24,9 @@ export default function App() {
       <PromptPanel activePrompt={activePrompt} onSelect={handlePrompt} />
     </div>
   )
+}
+*/
+
+export default function App() {
+  return null;
 }

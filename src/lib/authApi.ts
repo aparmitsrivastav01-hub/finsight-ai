@@ -33,7 +33,7 @@ export type AuthSuccessResponse = TokenResponse & { user: UserPublic };
 export const authApi = {
   async register(username: string, email: string, password: string): Promise<UserPublic> {
     const base = getResolvedApiBase();
-    console.info('[authApi] POST /register', { base });
+    // console.info('[authApi] POST /register', { base });
     const res = await fetch(`${base}/register`, {
       method: 'POST',
       headers: jsonHeaders,
@@ -47,7 +47,7 @@ export const authApi = {
 
   async login(identifier: string, password: string): Promise<TokenResponse> {
     const base = getResolvedApiBase();
-    console.info('[authApi] POST /login', { base });
+    // console.info('[authApi] POST /login', { base });
     const res = await fetch(`${base}/login`, {
       method: 'POST',
       headers: jsonHeaders,
@@ -65,7 +65,7 @@ export const authApi = {
     const controller = new AbortController();
     const t = window.setTimeout(() => controller.abort(), ME_TIMEOUT_MS);
     try {
-      console.info('[authApi] GET /me', { url });
+      // console.info('[authApi] GET /me', { url });
       const res = await fetch(url, {
         headers: { Authorization: `Bearer ${token}` },
         signal: controller.signal,
@@ -90,7 +90,7 @@ export const authApi = {
 
   async loginWithGoogle(credential: string): Promise<AuthSuccessResponse> {
     const base = getResolvedApiBase();
-    console.info('[authApi] POST /auth/google', { base });
+    // console.info('[authApi] POST /auth/google', { base });
     const res = await fetch(`${base}/auth/google`, {
       method: 'POST',
       headers: jsonHeaders,

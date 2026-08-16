@@ -21,11 +21,11 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (useAuthStore.persist.hasHydrated()) {
       setPersistReady(true);
-      console.info('[auth] persist already hydrated');
+      // console.info('[auth] persist already hydrated');
     }
     const unsub = useAuthStore.persist.onFinishHydration(() => {
       setPersistReady(true);
-      console.info('[auth] onFinishHydration — persist rehydration complete');
+      // console.info('[auth] onFinishHydration — persist rehydration complete');
     });
     return unsub;
   }, []);
@@ -49,14 +49,14 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
     (async () => {
       try {
         if (!accessToken) {
-          console.info('[auth] ProtectedRoute — no token, skip /me');
+          // console.info('[auth] ProtectedRoute — no token, skip /me');
           return;
         }
         if (!user) {
-          console.info('[auth] ProtectedRoute — validating token via /me');
+          // console.info('[auth] ProtectedRoute — validating token via /me');
           await fetchMe();
         } else {
-          console.info('[auth] ProtectedRoute — user already in memory');
+          // console.info('[auth] ProtectedRoute — user already in memory');
         }
       } catch (e) {
         console.warn('[auth] ProtectedRoute session check error', e);
@@ -64,7 +64,7 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
       } finally {
         if (!cancelled) {
           setSessionReady(true);
-          console.info('[auth] ProtectedRoute — session gate finished');
+          // console.info('[auth] ProtectedRoute — session gate finished');
         }
       }
     })();
