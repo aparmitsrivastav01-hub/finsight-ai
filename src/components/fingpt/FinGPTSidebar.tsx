@@ -186,10 +186,9 @@ export default function FinGPTSidebar({ mobileOpen = false, onMobileClose }: Pro
                 p-3 sm:p-3.5 transition-all duration-200
                 cursor-pointer min-w-0
                 disabled:opacity-60 disabled:cursor-wait
-                ${
-                  isActive
-                    ? 'border-teal-core/50 bg-teal-core/8 shadow-teal-glow'
-                    : 'border-border-mist bg-surface-dark hover:border-teal-core/30 hover:bg-teal-core/5'
+                ${isActive
+                  ? 'border-teal-core/50 bg-teal-core/8 shadow-teal-glow'
+                  : 'border-border-mist bg-surface-dark hover:border-teal-core/30 hover:bg-teal-core/5'
                 }
               `}
             >
@@ -197,10 +196,9 @@ export default function FinGPTSidebar({ mobileOpen = false, onMobileClose }: Pro
                 <div
                   className={`
                     w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0
-                    ${
-                      isActive
-                        ? 'bg-teal-core/20 border border-teal-core/40'
-                        : 'bg-border-mist/50 border border-border-mist'
+                    ${isActive
+                      ? 'bg-teal-core/20 border border-teal-core/40'
+                      : 'bg-border-mist/50 border border-border-mist'
                     }
                   `}
                 >
@@ -218,10 +216,9 @@ export default function FinGPTSidebar({ mobileOpen = false, onMobileClose }: Pro
                       className={`
                         font-mono text-[10px]
                         px-1.5 py-0.5 rounded border flex-shrink-0
-                        ${
-                          isActive
-                            ? 'text-teal-core border-teal-core/40 bg-teal-core/10'
-                            : 'text-muted-ink border-border-mist bg-obsidian/40'
+                        ${isActive
+                          ? 'text-teal-core border-teal-core/40 bg-teal-core/10'
+                          : 'text-muted-ink border-border-mist bg-obsidian/40'
                         }
                       `}
                     >
@@ -303,9 +300,8 @@ export default function FinGPTSidebar({ mobileOpen = false, onMobileClose }: Pro
 
       <div className="px-2 sm:px-3 pb-4 sm:pb-5 pt-2 flex-shrink-0">
         <div
-          className={`rounded-xl transition-all ${
-            dragActive ? 'ring-2 ring-teal-core/60 ring-offset-2 ring-offset-deep-slate' : ''
-          }`}
+          className={`rounded-xl transition-all ${dragActive ? 'ring-2 ring-teal-core/60 ring-offset-2 ring-offset-deep-slate' : ''
+            }`}
           onDragEnter={(e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -335,11 +331,10 @@ export default function FinGPTSidebar({ mobileOpen = false, onMobileClose }: Pro
             items-center gap-2
             transition-all duration-300
             cursor-pointer
-            ${
-              uploadHover || dragActive
+            ${uploadHover || dragActive
                 ? 'border-teal-core/60 bg-teal-core/5 shadow-teal-glow'
                 : 'border-border-mist bg-surface-dark/40 hover:border-teal-core/40'
-            }
+              }
           `}
             onMouseEnter={() => setUploadHover(true)}
             onMouseLeave={() => setUploadHover(false)}
@@ -356,17 +351,15 @@ export default function FinGPTSidebar({ mobileOpen = false, onMobileClose }: Pro
             <div
               className={`
               w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0
-              ${
-                uploadHover || dragActive
+              ${uploadHover || dragActive
                   ? 'bg-teal-core/20 border border-teal-core/40'
                   : 'bg-border-mist/50'
-              }
+                }
             `}
             >
               <FilePlus
-                className={`w-4 h-4 ${
-                  uploadHover || dragActive ? 'text-teal-core' : 'text-muted-ink'
-                }`}
+                className={`w-4 h-4 ${uploadHover || dragActive ? 'text-teal-core' : 'text-muted-ink'
+                  }`}
               />
             </div>
 
@@ -386,6 +379,15 @@ export default function FinGPTSidebar({ mobileOpen = false, onMobileClose }: Pro
               <div className="font-body text-[10px] text-muted-ink/60 mt-0.5 break-words">
                 PDF · drag & drop or click
               </div>
+
+
+
+              <div className="mt-2 px-1 text-center">
+                <p className="font-body text-[9px] leading-relaxed text-amber-300/70">
+                  ⚠️ For best results, use a valid, text-readable PDF.
+                  Password-protected, corrupted, or scanned PDFs may not process correctly.
+                </p>
+              </div>
               {isUploading && (
                 <div className="mt-3 w-full">
                   <Progress value={uploadProgress} className="h-1.5 bg-border-mist" />
@@ -394,9 +396,8 @@ export default function FinGPTSidebar({ mobileOpen = false, onMobileClose }: Pro
             </div>
 
             <Upload
-              className={`w-3 h-3 flex-shrink-0 ${
-                uploadHover || dragActive ? 'text-teal-core' : 'text-muted-ink/40'
-              }`}
+              className={`w-3 h-3 flex-shrink-0 ${uploadHover || dragActive ? 'text-teal-core' : 'text-muted-ink/40'
+                }`}
             />
           </label>
         </div>
