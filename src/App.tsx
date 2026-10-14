@@ -5,6 +5,7 @@ import Landing from './pages/Landing';
 import FinGPT from './pages/FinGPT';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import AdminApp from './admin';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           </ProtectedRoute>
         }
       />
+      <Route path="/admin/*" element={<AdminApp />} />
     </Routes>
   );
 }

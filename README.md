@@ -128,3 +128,23 @@ flowchart LR
 ## Environment reference
 
 See `backend/main llm/.env.example`.
+
+Notable keys:
+
+| Variable | Purpose |
+|----------|---------|
+| `HF_TOKEN` | Hugging Face Inference for `/ask` |
+| `FIRECRAWL_API_KEY` | Firecrawl scrape for `POST /ingest/url` |
+| `JWT_SECRET_KEY` | JWT signing |
+| `GOOGLE_CLIENT_ID` | Google Sign-In |
+
+### Ingest a URL (Firecrawl)
+
+```bash
+curl -X POST http://127.0.0.1:8000/ingest/url \
+  -H "Authorization: Bearer YOUR_JWT" \
+  -H "Content-Type: application/json" \
+  -d '{"url":"https://example.com/investor-report"}'
+```
+
+Scraped markdown is chunked and stored in Chroma (same path as PDF upload — replaces the prior corpus). Then use `GET /ask` as usual.

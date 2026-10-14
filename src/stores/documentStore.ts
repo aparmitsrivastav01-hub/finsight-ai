@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
-import { deleteDocument, fetchDocuments, uploadPDF } from '@/lib/api';
+import { deleteDocument, fetchDocuments, ingestUrl, uploadPDF } from '@/lib/api';
 
 export type FinDocument = {
   id: string;
@@ -16,11 +16,13 @@ type DocumentState = {
   activeDocumentId: string | null;
   isLoading: boolean;
   isUploading: boolean;
+  isIngestingUrl: boolean;
   uploadProgress: number;
   error: string | null;
   setActiveDocument: (id: string | null) => void;
   fetchDocuments: () => Promise<void>;
   uploadDocument: (file: File) => Promise<void>;
+  ingestFromUrl: (url: string) => Promise<void>;
   removeDocument: (id: string) => Promise<void>;
   clearError: () => void;
 };
@@ -41,6 +43,7 @@ export const useDocumentStore = create<DocumentState>()(
       activeDocumentId: null,
       isLoading: false,
       isUploading: false,
+      isIngestingUrl: false,
       uploadProgress: 0,
       error: null,
 
@@ -97,6 +100,35 @@ export const useDocumentStore = create<DocumentState>()(
         } catch (err) {
           const msg = err instanceof Error ? err.message : 'Upload failed';
           set({ isUploading: false, uploadProgress: 0, error: msg });
+          throw err;
+        }
+      },
+
+      ingestFromUrl: async (url) => {
+        const trimmed = url.trim();
+        if (!trimmed) {
+          throw new Error('URL is required');
+        }
+        set({ isIngestingUrl: true, error: null });
+        try {
+          const res = await ingestUrl(trimmed);
+          const doc: FinDocument =
+            res.document ?? {
+              id: `web_${Date.now()}`,
+              name: res.url || trimmed,
+              size: res.chars ?? 0,
+              uploadedAt: new Date().toISOString(),
+              type: 'text/uri-list',
+            };
+
+          set((state) => ({
+            documents: mergeDocuments([doc], state.documents),
+            activeDocumentId: doc.id,
+            isIngestingUrl: false,
+          }));
+        } catch (err) {
+          const msg = err instanceof Error ? err.message : 'URL ingest failed';
+          set({ isIngestingUrl: false, error: msg });
           throw err;
         }
       },

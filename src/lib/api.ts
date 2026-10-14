@@ -48,7 +48,41 @@ export type UploadResponse = {
   health?: FinancialHealth;
 };
 
+export type IngestUrlResponse = {
+  message: string;
+  url: string;
+  chunks: number;
+  chars: number;
+  document?: FinDocumentDto;
+  user_id?: number;
+};
+
 export type DocumentsListResponse = { documents: FinDocumentDto[] };
+
+function apiErrorMessage(err: unknown, fallback: string): string {
+  if (axios.isAxiosError(err)) {
+    const detail = err.response?.data?.detail;
+    if (typeof detail === 'string' && detail.trim()) return detail;
+    if (Array.isArray(detail) && detail[0]?.msg) return String(detail[0].msg);
+    if (err.message) return err.message;
+  }
+  if (err instanceof Error && err.message) return err.message;
+  return fallback;
+}
+
+export async function ingestUrl(url: string): Promise<IngestUrlResponse> {
+  const base = getResolvedApiBase();
+  try {
+    const { data } = await axios.post<IngestUrlResponse>(
+      `${base}/ingest/url`,
+      { url },
+      { headers: { ...authHeaders(), 'Content-Type': 'application/json' }, timeout: 120_000 }
+    );
+    return data;
+  } catch (err) {
+    throw new Error(apiErrorMessage(err, 'URL ingest failed'));
+  }
+}
 
 export async function uploadPDF(
   file: File,

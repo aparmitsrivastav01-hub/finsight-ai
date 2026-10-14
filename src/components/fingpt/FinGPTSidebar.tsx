@@ -9,6 +9,7 @@ import {
   Trash2,
   Loader2,
   AlertCircle,
+  Link2,
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -30,17 +31,20 @@ export default function FinGPTSidebar({ mobileOpen = false, onMobileClose }: Pro
   const activeDocumentId = useDocumentStore((s) => s.activeDocumentId);
   const isLoading = useDocumentStore((s) => s.isLoading);
   const isUploading = useDocumentStore((s) => s.isUploading);
+  const isIngestingUrl = useDocumentStore((s) => s.isIngestingUrl);
   const uploadProgress = useDocumentStore((s) => s.uploadProgress);
   const error = useDocumentStore((s) => s.error);
   const setActiveDocument = useDocumentStore((s) => s.setActiveDocument);
   const fetchDocuments = useDocumentStore((s) => s.fetchDocuments);
   const uploadDocument = useDocumentStore((s) => s.uploadDocument);
+  const ingestFromUrl = useDocumentStore((s) => s.ingestFromUrl);
   const removeDocument = useDocumentStore((s) => s.removeDocument);
   const clearError = useDocumentStore((s) => s.clearError);
 
   const [uploadHover, setUploadHover] = useState(false);
   const [dragActive, setDragActive] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [urlInput, setUrlInput] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -108,6 +112,35 @@ export default function FinGPTSidebar({ mobileOpen = false, onMobileClose }: Pro
       toast.error(msg);
     } finally {
       setDeletingId(null);
+    }
+  };
+
+  const handleIngestUrl = async () => {
+    const url = urlInput.trim();
+    if (!url) {
+      toast.error('Enter a URL to scrape');
+      return;
+    }
+    try {
+      // Allow paste without scheme
+      const normalized = /^https?:\/\//i.test(url) ? url : `https://${url}`;
+      await ingestFromUrl(normalized);
+      setUrlInput('');
+      toast.success('URL scraped and indexed');
+      useNotificationsStore.getState().add({
+        title: 'Web page ingested',
+        body: `${normalized} is ready for analysis.`,
+        type: 'success',
+      });
+    } catch (err) {
+      console.error(err);
+      const msg = err instanceof Error ? err.message : 'URL ingest failed';
+      toast.error(msg);
+      useNotificationsStore.getState().add({
+        title: 'URL ingest failed',
+        body: msg,
+        type: 'error',
+      });
     }
   };
 
@@ -298,7 +331,43 @@ export default function FinGPTSidebar({ mobileOpen = false, onMobileClose }: Pro
         </div>
       )}
 
-      <div className="px-2 sm:px-3 pb-4 sm:pb-5 pt-2 flex-shrink-0">
+      <div className="px-2 sm:px-3 pb-4 sm:pb-5 pt-2 flex-shrink-0 space-y-3">
+        <div className="rounded-xl border border-border-mist bg-surface-dark/40 p-3 space-y-2">
+          <div className="flex items-center gap-2 text-xs font-sans font-medium text-muted-ink">
+            <Link2 className="w-3.5 h-3.5 text-teal-core flex-shrink-0" />
+            Scrape URL (Firecrawl)
+          </div>
+          <input
+            type="url"
+            value={urlInput}
+            onChange={(e) => setUrlInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                void handleIngestUrl();
+              }
+            }}
+            placeholder="https://company.com/10-k"
+            disabled={isIngestingUrl || isUploading}
+            className="w-full rounded-lg border border-border-mist bg-deep-slate/60 px-2.5 py-2 text-xs text-soft-white placeholder:text-muted-ink/50 focus:outline-none focus:ring-1 focus:ring-teal-core/50"
+          />
+          <button
+            type="button"
+            onClick={() => void handleIngestUrl()}
+            disabled={isIngestingUrl || isUploading || !urlInput.trim()}
+            className="w-full rounded-lg bg-teal-core/15 border border-teal-core/40 px-3 py-2 text-xs font-medium text-teal-core hover:bg-teal-core/25 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          >
+            {isIngestingUrl ? (
+              <>
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                Scraping…
+              </>
+            ) : (
+              'Ingest URL'
+            )}
+          </button>
+        </div>
+
         <div
           className={`rounded-xl transition-all ${dragActive ? 'ring-2 ring-teal-core/60 ring-offset-2 ring-offset-deep-slate' : ''
             }`}
@@ -345,7 +414,7 @@ export default function FinGPTSidebar({ mobileOpen = false, onMobileClose }: Pro
               accept="application/pdf,.pdf"
               className="hidden"
               onChange={handleUpload}
-              disabled={isUploading}
+              disabled={isUploading || isIngestingUrl}
             />
 
             <div
