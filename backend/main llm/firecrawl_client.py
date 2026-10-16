@@ -10,9 +10,10 @@ import os
 from typing import Any
 
 import httpx
-from dotenv import load_dotenv
 
-load_dotenv()
+from env_config import load_backend_env
+
+load_backend_env()
 logger = logging.getLogger(__name__)
 
 DEFAULT_API_URL = "https://api.firecrawl.dev/v2"

@@ -9,7 +9,7 @@ pinned: false
 
 # FinSight FinGPT
 
-FinSight is a financial document Q&A API: upload PDF statements, retrieve context with ChromaDB + embeddings, and get analyst-style answers via Hugging Face Inference (`microsoft/Phi-3-mini-4k-instruct`). FastAPI backend on port **7860**; connect the Vercel frontend with `VITE_API_URL`.
+FinSight is a financial document Q&A API: upload PDF statements, retrieve context with ChromaDB + embeddings, and get analyst-style answers via NVIDIA Nemotron on OpenRouter (`nvidia/Nemotron-3-8B-Instruct`). FastAPI backend on port **7860**; connect the Vercel frontend with `VITE_API_URL`.
 
 ## Deploy backend on Hugging Face Spaces (Docker)
 
@@ -25,16 +25,15 @@ The root **`Dockerfile`** builds the FastAPI app from `backend/main llm/`, binds
 
 | Secret / variable | Required | Description |
 |-------------------|----------|-------------|
-| `HF_API_TOKEN` | Yes | Hugging Face token with Inference API access |
-| `HF_MODEL` | No | Default: `microsoft/Phi-3-mini-4k-instruct` |
-| `JWT_SECRET` | Yes | Long random string for auth tokens |
+| `OPENROUTER_API_KEY` | Yes | OpenRouter API key for chat completions |
+| `OPENROUTER_MODEL` | No | Default: `nvidia/Nemotron-3-8B-Instruct` |
+| `JWT_SECRET_KEY` | Yes | Long random string for auth tokens |
 | `GOOGLE_CLIENT_ID` | If using Google sign-in | OAuth client ID |
 | `CORS_ALLOW_ORIGINS` | Yes for Vercel frontend | Comma-separated origins, e.g. `https://finsight-ai-ebon.vercel.app,http://localhost:5173` |
 
 Optional:
 
-- `HF_INFERENCE_PROVIDER` — default `auto` (recommended for Phi-3)
-- `HF_INFERENCE_TIMEOUT_SECONDS` — default `120`
+- `OPENROUTER_TIMEOUT_SECONDS` — default `120`
 - `CHROMA_PERSIST_DIR` — default `/data/chroma` in Docker
 - `FINSIGHT_SQLITE_PATH` — default `/data/finsight_users.db` in Docker
 - `LOG_LEVEL` — `INFO` or `DEBUG`
@@ -82,7 +81,7 @@ cd "backend/main llm"
 python -m venv .venv
 .venv\Scripts\activate   # Windows
 pip install -r requirements.txt
-copy .env.example .env   # set HF_API_TOKEN, JWT_SECRET, etc.
+copy .env.example .env   # set OPENROUTER_API_KEY, JWT_SECRET_KEY, etc.
 uvicorn main:app --reload --host 127.0.0.1 --port 8000
 ```
 
@@ -101,7 +100,7 @@ From repo root:
 
 ```bash
 docker build -t finsight-api .
-docker run -p 7860:7860 -e HF_API_TOKEN=hf_xxx -e JWT_SECRET=change-me -e CORS_ALLOW_ORIGINS=http://localhost:5173 finsight-api
+docker run -p 7860:7860 -e OPENROUTER_API_KEY=sk-or-xxx -e JWT_SECRET_KEY=change-me -e CORS_ALLOW_ORIGINS=http://localhost:5173 finsight-api
 ```
 
 Open `http://localhost:7860/health`.
@@ -115,12 +114,12 @@ flowchart LR
   FE[Vercel frontend] -->|HTTPS + JWT| API[FastAPI :7860]
   API --> CHROMA[ChromaDB /data/chroma]
   API --> SQL[SQLite /data]
-  API --> HF[HF Inference Phi-3]
+  API --> OR[OpenRouter Nemotron]
   API --> EMB[MiniLM embeddings]
 ```
 
 - **PDF parsing:** lightweight `pypdf` extraction (no unstructured / hi_res).
-- **Inference:** remote Hugging Face API only (no Ollama).
+- **Inference:** OpenRouter Chat Completions only (NVIDIA Nemotron; no Hugging Face Inference API).
 - **Memory:** single uvicorn worker, lazy embedding load, optional `PRELOAD_EMBEDDING_MODEL` in Docker.
 
 ---
@@ -133,7 +132,8 @@ Notable keys:
 
 | Variable | Purpose |
 |----------|---------|
-| `HF_TOKEN` | Hugging Face Inference for `/ask` |
+| `OPENROUTER_API_KEY` | OpenRouter inference for `/ask` |
+| `OPENROUTER_MODEL` | Chat model id (default `nvidia/Nemotron-3-8B-Instruct`) |
 | `FIRECRAWL_API_KEY` | Firecrawl scrape for `POST /ingest/url` |
 | `JWT_SECRET_KEY` | JWT signing |
 | `GOOGLE_CLIENT_ID` | Google Sign-In |

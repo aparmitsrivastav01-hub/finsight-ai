@@ -1,6 +1,6 @@
-"""LLM bridge: RAG context + user query → Hugging Face Inference (see hf_llm)."""
+"""LLM bridge: RAG context + user query → OpenRouter (see openrouter_llm)."""
 
-from hf_llm import generate_response
+from openrouter_llm import generate_response
 
 
 async def generate_answer(context, query):

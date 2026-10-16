@@ -10,13 +10,28 @@ function authHeaders(): Record<string, string> {
 
 export type AskResponse = { query: string; answer: string };
 
+function apiErrorMessage(err: unknown, fallback: string): string {
+  if (axios.isAxiosError(err)) {
+    const detail = err.response?.data?.detail;
+    if (typeof detail === 'string' && detail.trim()) return detail;
+    if (Array.isArray(detail) && detail[0]?.msg) return String(detail[0].msg);
+    if (err.message) return err.message;
+  }
+  if (err instanceof Error && err.message) return err.message;
+  return fallback;
+}
+
 export async function askQuestion(query: string): Promise<AskResponse> {
   const base = getResolvedApiBase();
-  const { data } = await axios.get<AskResponse>(`${base}/ask`, {
-    params: { query },
-    headers: authHeaders(),
-  });
-  return data;
+  try {
+    const { data } = await axios.get<AskResponse>(`${base}/ask`, {
+      params: { query },
+      headers: authHeaders(),
+    });
+    return data;
+  } catch (err) {
+    throw new Error(apiErrorMessage(err, 'Analysis request failed'));
+  }
 }
 
 export type FinDocumentDto = {
@@ -58,17 +73,6 @@ export type IngestUrlResponse = {
 };
 
 export type DocumentsListResponse = { documents: FinDocumentDto[] };
-
-function apiErrorMessage(err: unknown, fallback: string): string {
-  if (axios.isAxiosError(err)) {
-    const detail = err.response?.data?.detail;
-    if (typeof detail === 'string' && detail.trim()) return detail;
-    if (Array.isArray(detail) && detail[0]?.msg) return String(detail[0].msg);
-    if (err.message) return err.message;
-  }
-  if (err instanceof Error && err.message) return err.message;
-  return fallback;
-}
 
 export async function ingestUrl(url: string): Promise<IngestUrlResponse> {
   const base = getResolvedApiBase();

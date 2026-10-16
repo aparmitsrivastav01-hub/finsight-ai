@@ -7,9 +7,9 @@ from contextlib import asynccontextmanager
 
 
 try:
-    from dotenv import load_dotenv
+    from env_config import load_backend_env
 
-    load_dotenv()
+    load_backend_env()
 except ImportError:
     pass
 
@@ -35,6 +35,7 @@ from auth.router import router as auth_router
 from firecrawl_client import FirecrawlError, is_configured as firecrawl_configured, scrape_url
 from health_engine import analyze_health
 from history.router import router as history_router
+from openrouter_llm import InferenceError
 from parser import parse_pdf
 from pdf_text_extract import chunk_text
 from rag import ask_question, store_chunks
@@ -303,7 +304,10 @@ async def ask(
     if not query or not query.strip():
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Query is required")
     q = query.strip()
-    answer = await ask_question(q)
+    try:
+        answer = await ask_question(q)
+    except InferenceError as exc:
+        raise HTTPException(status_code=exc.status_code, detail=str(exc)) from exc
 
     try:
         _save_query_history(user.id, q, answer)
